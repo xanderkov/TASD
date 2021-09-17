@@ -160,10 +160,7 @@ bool all_null(int *arr, int n)
 
 int is_first_bigger(int first[], int second[], int n, int second_n)
 {
-    for (int i = n - 1; i >= 0; i--)
-        if (first[i] > 0)
-            return true;
-    for (int i = 0; i <= second_n; i++)
+    for (int i = 0; i < second_n; i++)
     {
         if (first[n + i] > second[i])
             return true;
@@ -175,23 +172,20 @@ int is_first_bigger(int first[], int second[], int n, int second_n)
 
 void substract(int first[], int second[], int second_n, int *diff, int null_quanity)
 {
+    int remain = 0;
     while (is_first_bigger(first, second, null_quanity, second_n))
     {
-        for (int i = second_n; i >= 0; i++)
+        for (int i = second_n - 1; i >= 0; i--)
         {
-            first[null_quanity + i] -= second[i];
+            first[null_quanity + i] -= second[i] - remain;
+            remain = 0;
             if (first[null_quanity + i] < 0)
             {
                 first[null_quanity + i] += 10;
-                for(int j = null_quanity + i - 1; j >= 0; j--)
+                if (first[null_quanity + i] < 0)
                 {
-                    if (first[j] > 0)
-                    {
-                        first[j] -= 1;
-                        break;
-                    }
-                    else if (first[j] == 0)
-                        first[j] = 9;
+                    first[null_quanity + i] += 10;
+                    remain = -1;
                 }
             }
         }
@@ -209,21 +203,28 @@ int division(real_number r_1, real_number r_2, real_number *res)
     for (int i = r_1.point_i; i <= r_2.point_i + 1; i++)
     {
         r_1.point_i++;
-        r_1.order--;
     }
-    while (null_quanity + r_2.point_i < N && !(all_null(r_1.natural, r_1.point_i)))
+    while (null_quanity + r_2.point_i < N && !(all_null(r_1.natural, r_1.point_i)) && null_quanity < N_NAT - 1)
     {
         int diff = 0;
         substract(r_1.natural, r_2.natural, r_2.point_i, &diff, null_quanity);
-        if (diff > 0)
-            res->natural[res->point_i++] = diff;
-        null_quanity++;
-        if (r_2.point_i + null_quanity == r_1.point_i)
+        res->natural[res->point_i] = diff;
+        if (!(is_first_bigger(r_1.natural, r_2.natural, null_quanity, r_2.point_i)))
         {
-            r_1.order--;
-            r_1.point_i++;
+            if (null_quanity + r_2.point_i == r_1.point_i)
+                r_1.point_i++;
+            r_1.natural[null_quanity + 1] += r_1.natural[null_quanity] * 10;
+            r_1.natural[null_quanity] = 0;
         }
+        null_quanity++;
+        res->point_i++;
+        if (r_1.point_i - r_2.point_i == res->point_i - 1)
+        {
+            res->point_i++;
+        }
+        
     }
+    make_number_without_pointer(&r_1);
     if (r_1.sign == r_2.sign)
         res->sign = ' ';
     else
@@ -240,7 +241,6 @@ void make_res_normal(real_number *res)
         for (int i = 0; i < res->meaning_n; i++)
             res->meaning[i + 1] = res->meaning[i];
         res->meaning[0] = res->natural[res->point_i-- - 1];
-        res->order++;
         res->meaning_n++;
     }
 }
@@ -255,6 +255,26 @@ void print_results(real_number res, int rc)
         rc = BIG_ORDER;
     if (rc == OK)
     {
+        if (res.meaning_n > N_NAT)
+        {
+            if (res.meaning[N_NAT] >= 5)
+            {
+                if (res.meaning[N_NAT] == 9)
+                {
+                    int j = N_NAT;
+                    while(res.meaning[j--] == 9)
+                    {
+                        res.meaning_n--;
+                    }
+                    res.meaning[res.meaning_n - 1] += 1;
+                }
+                else
+                {
+                    res.meaning[N_NAT - 1] += 1;
+                    res.meaning_n = N_NAT;
+                }
+            }
+        }
         fprintf(f, "%c%d%c", res.sign, 0, '.');
         for (int i = 0; i < res.meaning_n; i++)
             fprintf(f, "%d", res.meaning[i]);
