@@ -177,21 +177,18 @@ void substract(int first[], int second[], int second_n, int *diff, int null_quan
     {
         for (int i = second_n - 1; i >= 0; i--)
         {
-            first[null_quanity + i] -= second[i] - remain;
+            first[null_quanity + i] = first[null_quanity + i] - second[i] + remain;
             remain = 0;
             if (first[null_quanity + i] < 0)
             {
                 first[null_quanity + i] += 10;
-                if (first[null_quanity + i] < 0)
-                {
-                    first[null_quanity + i] += 10;
-                    remain = -1;
-                }
+                remain = -1;
             }
         }
         (*diff)++;
     }
 }
+
 
 int division(real_number r_1, real_number r_2, real_number *res)
 {
@@ -204,7 +201,7 @@ int division(real_number r_1, real_number r_2, real_number *res)
     {
         r_1.point_i++;
     }
-    while (null_quanity + r_2.point_i < N && !(all_null(r_1.natural, r_1.point_i)) && null_quanity < N_NAT - 1)
+    while (null_quanity + r_2.point_i < N && null_quanity < N_NAT - 1)
     {
         int diff = 0;
         substract(r_1.natural, r_2.natural, r_2.point_i, &diff, null_quanity);
@@ -212,21 +209,19 @@ int division(real_number r_1, real_number r_2, real_number *res)
         if (!(is_first_bigger(r_1.natural, r_2.natural, null_quanity, r_2.point_i)))
         {
             if (null_quanity + r_2.point_i == r_1.point_i)
+            {
                 r_1.point_i++;
+                r_1.order--;
+            }
             r_1.natural[null_quanity + 1] += r_1.natural[null_quanity] * 10;
             r_1.natural[null_quanity] = 0;
         }
         null_quanity++;
         res->point_i++;
-        if (r_1.point_i - r_2.point_i == res->point_i - 1)
-        {
-            res->point_i++;
-        }
-        
     }
     make_number_without_pointer(&r_1);
     if (r_1.sign == r_2.sign)
-        res->sign = ' ';
+        res->sign = '+';
     else
         res->sign = '-';
     res->order = r_1.order - r_2.order;
@@ -238,11 +233,24 @@ void make_res_normal(real_number *res)
 {
     while (res->point_i > 0)
     {
-        for (int i = 0; i < res->meaning_n; i++)
-            res->meaning[i + 1] = res->meaning[i];
+        for (int i = res->meaning_n; i > 0; i--)
+            res->meaning[i] = res->meaning[i - 1];
         res->meaning[0] = res->natural[res->point_i-- - 1];
         res->meaning_n++;
+        res->order++;
     }
+    while (res->meaning[0] == 0)
+    {
+        for (int i = 0; i < res->meaning_n; i++)
+            res->meaning[i] = res->meaning[i + 1];
+        res->meaning_n--;
+        res->order--;
+    }
+    while (res->meaning[res->meaning_n - 1] == 0)
+    {
+        res->meaning_n--;
+    }
+    
 }
 
 
@@ -315,6 +323,6 @@ void start_operation(char *number_1, char *order_1, char *number_2, char *order_
 
 int main()
 {
-    start_operation("13", "0", "3", "0");
+    start_operation("12", "0", "2", "0");
     return OK;
 }
