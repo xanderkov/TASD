@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/xander/iu7-software-engineering-labs-2021-kovelalexander/long_ariphmetic/build",
-  "command": "/bin/x86_64-linux-gnu-gcc-9   -g   -o CMakeFiles/debug.dir/main.c.o   -c /home/xander/iu7-software-engineering-labs-2021-kovelalexander/long_ariphmetic/main.c",
-  "file": "/home/xander/iu7-software-engineering-labs-2021-kovelalexander/long_ariphmetic/main.c"
-}
-]
