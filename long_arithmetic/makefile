@@ -1,8 +1,8 @@
 CC := gcc
-CFLAGS := gcc -std=c99 -Wall -Werror -pedantic
+CFLAGS := -std=c99 -Wall -Werror -pedantic
 OBJ := in_out.o number_division.o
 
-app.exe : $(OBJ) main.o
+main.exe : $(OBJ) main.o
 	$(CC) -o app.exe $(OBJ) main.o
 
 in_out.o : in_out.c in_out.h long_number.h
