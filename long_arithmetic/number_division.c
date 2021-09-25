@@ -2,11 +2,11 @@
 #include "long_number.h"
 #include "defines.h"
 
-void shift(long_float *divider)
+void shift(long_float *number)
 {
-    for (int i = 0; i < divider->significand_length - 1; i++)
-        divider->significand[i] = divider->significand[i + 1];
-    divider->significand[divider->significand_length - 1] = 0;
+    for (int i = 0; i < number->significand_length - 1; i++)
+        number->significand[i] = number->significand[i + 1];
+    number->significand[number->significand_length - 1] = 0;
 }
 
 void make_number_without_dot(long_float *number)
@@ -89,6 +89,7 @@ void prepare_for_division(long_float *a, long_float *b, int *final_base)
         make_number_without_dot(b);
     if (a->dot_index != 0)
         make_number_without_dot(a);
+
     a->start_index = 0;
     a->end_index = a->significand_length;
     b->start_index = 0;
@@ -114,7 +115,7 @@ int is_zero(long_float *dividend)
 {
     int check = 1;
     for (int i = 0; i < dividend->significand_length; i++)
-        if (dividend->significand[i] != 0)
+        if (dividend->significand[i] != 0 || dividend->significand[i] == '.')
             check = 0;
     return check;
 }

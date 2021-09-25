@@ -1,0 +1,68 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "options": {
+                "cwd": "C:\\msys64\\mingw64\\bin"
+            },
+            "type": "shell",
+            "label": "make.exe",
+            "command": "C:\\msys64\\usr\\bin\\make.exe",
+            "args": [
+                "-C",
+                "${workspaceFolder}"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "options": {
+                "cwd": "C:\\msys64\\mingw64\\bin"
+            },
+            "type": "shell",
+            "label": "gcc.exe debag",
+            "command": "C:\\msys64\\mingw64\\bin\\gcc.exe",
+            "args": [
+                "-std=c99",
+                "-Wall",
+                "-Werror",
+                "-Wpedantic",
+                "-Wfloat-equal",
+                "-Wfloat-conversion",
+                "-Wvla",
+                "-g3",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "options": {
+                "cwd": "C:\\msys64\\mingw64\\bin"
+            },
+            "type": "shell",
+            "label": "gcc.exe build",
+            "command": "C:\\msys64\\mingw64\\bin\\gcc.exe",
+            "args": [
+                "-Wall",
+                "-Werror",
+                "-Wpedantic",
+                "-Wfloat-equal",
+                "-Wfloat-conversion",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        }
+    ]
+}

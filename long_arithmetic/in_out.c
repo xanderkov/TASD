@@ -1,18 +1,22 @@
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include "defines.h"
 #include "long_number.h"
 
+int is_digit(char ch)
+{
+    return (ch >= '0' && ch <= '9');
+}
 
-int read_line(char *str, int max_length)
+
+int read_line(char *str)
 {
     int check = OK;
     char ch = 0;
     int i = 0;
     scanf("%c", &ch);
     while (check == OK && ch != '\n' && ch != '\r')
-        if (i < max_length - 1)
+        if (i < MAX_FLOAT_LENGTH)
         {
             str[i++] = ch;
             scanf("%c", &ch);
@@ -25,25 +29,6 @@ int read_line(char *str, int max_length)
     if (i <= 0)
         check = ERR_LENGTH;
     return check;
-}
-
-int is_long_integer(char *str)
-{
-    int result = 1, i = 0;
-    if (str[i] == '+' || str[i] == '-')
-        i++;
-    if (str[i] == '0' && str[i + 1] != '\0')
-        result = 0;
-    else
-    {
-        while (str[i] != 0 && isdigit(str[i]))
-            i++;
-        if (str[i] == 0 && i < 30)
-            result = 1;
-        else
-            result = 0;
-    }
-    return result;
 }
 
 
@@ -74,12 +59,12 @@ int is_long_float(char *str)
     {
         if (dots_amount == 1)
         {
-            if (str[i] == '0' && str[i + 1] == '0')
+            if ((str[i] == '0' && str[i + 1] == '0') || (str[i] == '0' && str[i + 2] == '0' && str[i + 1] == '.'))
             {
                 printf("Ведущие нули\n");
                 result = 0;
             }
-            while (str[i] != '.' && isdigit(str[i]))
+            while (str[i] != '.' && is_digit(str[i]))
             {
                 i++;
                 significand_digits_amount++;
@@ -91,7 +76,7 @@ int is_long_float(char *str)
         }
         if (result)
         {
-            while (str[i] != 'e' && str[i] != 'E' && isdigit(str[i]))
+            while (str[i] != 'e' && str[i] != 'E' && is_digit(str[i]))
             {
                 i++;
                 significand_digits_amount++;
@@ -107,7 +92,7 @@ int is_long_float(char *str)
                 i++;
             if (str[i] == '0' && str[i + 1] == '0')
                 result = 0;
-            while (str[i] != 0 && isdigit(str[i]))
+            while (str[i] != 0 && is_digit(str[i]))
             {
                 i++;
                 digits++;
@@ -123,7 +108,7 @@ int is_long_float(char *str)
     return result;
 }
 
-int turn_str_to_float(char *str, long_float *number)
+int turn_str_to_float(char *str, long_float *number, int is_second)
 {
     int check = OK, i = 0;
     if (str[i] == '-')
@@ -131,13 +116,13 @@ int turn_str_to_float(char *str, long_float *number)
     if (str[i] == '-' || str[i] == '+')
         i++;
     int j = 0;
-    while (isdigit(str[i]))
+    while (is_digit(str[i]))
         number->significand[j++] = str[i++] - '0';
     if (str[i] == '.')
     {
         number->dot_index = j;
         i++;
-        while(isdigit(str[i]))
+        while(is_digit(str[i]))
             number->significand[j++] = str[i++] - '0';
     }
     if (str[i] == 'e' || str[i] == 'E')
@@ -147,51 +132,40 @@ int turn_str_to_float(char *str, long_float *number)
         number->is_base_negative = 1;
     if (str[i] == '-' || str[i] == '+')
         i++;
-    while (isdigit(str[i]))
+    while (is_digit(str[i]))
         number->base = number->base * 10 + (str[i++] - '0');
     if (number->is_base_negative)
         number->base *= -1;
     if (str[i] != 0)
         check = ERR_READ;
-    int is_zeroes = 1;
-    for (i = 0; i < number->significand_length; i++)
-        if (number->significand[i] != 0)
-            is_zeroes = 0;
-    if (is_zeroes)
-        check = ERR_ZERO;
+    if (is_second == OK)
+    {
+        int is_zeroes = 1;
+        for (i = 0; i < number->significand_length; i++)
+            if (number->significand[i] != 0)
+                is_zeroes = 0;
+        if (is_zeroes)
+            check = ERR_ZERO;
+        return check;
+    }
     return check;
 }
 
-int get_long_float(long_float *number)
+
+int get_long_float(long_float *number, int is_second)
 {
     int check = OK;
     char str[MAX_FLOAT_LENGTH + 1] = { 0 };
     printf("Введите действительное число:\n");
     printf("1       10         20        30\n");
     printf("|--------|---------|---------|\n");
-    check = read_line(str, MAX_FLOAT_LENGTH + 1);
+    check = read_line(str);
     if (check == OK)
     {
         if (is_long_float(str))
-            check = turn_str_to_float(str, number);
+            check = turn_str_to_float(str, number, is_second);
         else
             check = ERR_READ;
     }
     return check;
-}
-
-int print_long_float(long_float number)
-{
-    int i;
-    if (number.is_significand_negative)
-        printf("-");
-    for (i = 0; i < number.dot_index; i++)
-        printf("%d", number.significand[i]);
-    if (number.dot_index != 0)
-        printf(".");
-    while(i < number.significand_length)
-        printf("%d", number.significand[i++]);
-    printf("e");
-    printf("%d\n", number.base);
-    return OK;
 }
