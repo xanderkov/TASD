@@ -59,7 +59,7 @@ int is_long_float(char *str)
     {
         if (dots_amount == 1)
         {
-            if ((str[i] == '0' && str[i + 1] == '0') || (str[i] == '0' && str[i + 2] == '0' && str[i + 1] == '.'))
+            if (str[i] == '0' && str[i + 1] == '0')
             {
                 printf("Ведущие нули\n");
                 result = 0;
@@ -111,6 +111,7 @@ int is_long_float(char *str)
 int turn_str_to_float(char *str, long_float *number, int is_second)
 {
     int check = OK, i = 0;
+    number->dot_index = -1;
     if (str[i] == '-')
         number->is_significand_negative = 1;
     if (str[i] == '-' || str[i] == '+')

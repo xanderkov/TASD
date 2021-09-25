@@ -85,11 +85,10 @@ void subract(long_float *dividend, long_float *divider)
 
 void prepare_for_division(long_float *a, long_float *b, int *final_base)
 {
-    if (b->dot_index != 0)
+    if (b->dot_index != -1)
         make_number_without_dot(b);
-    if (a->dot_index != 0)
+    if (a->dot_index != -1)
         make_number_without_dot(a);
-
     a->start_index = 0;
     a->end_index = a->significand_length;
     b->start_index = 0;
@@ -115,25 +114,67 @@ int is_zero(long_float *dividend)
 {
     int check = 1;
     for (int i = 0; i < dividend->significand_length; i++)
-        if (dividend->significand[i] != 0 || dividend->significand[i] == '.')
+        if (dividend->significand[i] != 0)
             check = 0;
     return check;
 }
 
+
+int round_long_float(long_float *c, int final_base)
+{
+    int i = MAX_SIGNIFICAND_LENGTH - 1;
+    if (c->significand[i] >= 5)
+    {
+        i--;
+        c->significand[i]++;
+        while (c->significand[i] == 10 && i > 0)
+        {
+            c->significand[i] = 0;
+            i--;
+            c->significand[i]++;
+        }
+        if (i == 0 && c->significand[i] == 10)
+        {
+            c->significand[i] = 1;
+            final_base++;
+        }
+    }
+    return i;
+}
+
+
+void make_float_normal(long_float a, long_float b, long_float *c, int final_base, int i)
+{
+    c->significand_length--;
+    c->is_significand_negative = (a.is_significand_negative + b.is_significand_negative) % 2;
+    c->base = final_base - (b.base) + a.base;
+    if (c->base < 0)
+        c->is_base_negative = 1;
+    else
+        c->is_base_negative = 0;
+    c->end_index = c->significand_length;
+    i = c->end_index - 1;
+    while(c->significand[i--] == 0)
+    {
+        c->end_index--;
+        c->base++;
+    }
+}
+
 int divide(long_float a, long_float b, long_float *c)
 {
-    int final_base = 0;
-    prepare_for_division(&a, &b, &final_base);
-    int i = 0, current_digit = 0;
-    c->significand_length = 0;
     if (is_zero(&a))
     {
         c->significand_length = 1;
         c->end_index = 1;
         c->base = 0;
-    }
+    } 
     else
     {
+        int final_base = 0;
+        prepare_for_division(&a, &b, &final_base);
+        int i = 0, current_digit = 0;
+        c->significand_length = 0;
         while(c->significand_length != MAX_SIGNIFICAND_LENGTH)
         {
             while (compare_long(&a, &b) >= 0)   
@@ -157,37 +198,8 @@ int divide(long_float a, long_float b, long_float *c)
             current_digit = 0;
             i++;
         }
-        i = MAX_SIGNIFICAND_LENGTH - 1;
-        if (c->significand[i] >= 5)
-        {
-            i--;
-            c->significand[i]++;
-            while (c->significand[i] == 10 && i > 0)
-            {
-                c->significand[i] = 0;
-                i--;
-                c->significand[i]++;
-            }
-            if (i == 0 && c->significand[i] == 10)
-            {
-                c->significand[i] = 1;
-                final_base++;
-            }
-        }
-        c->significand_length--;
-        c->is_significand_negative = (a.is_significand_negative + b.is_significand_negative) % 2;
-        c->base = final_base - (b.base) + a.base;
-        if (c->base < 0)
-            c->is_base_negative = 1;
-        else
-            c->is_base_negative = 0;
-        c->end_index = c->significand_length;
-        i = c->end_index - 1;
-        while(c->significand[i--] == 0)
-        {
-            c->end_index--;
-            c->base++;
-        }
+        i = round_long_float(c, final_base);
+        make_float_normal(a, b, c, final_base, i);
     }
     return OK;
 }

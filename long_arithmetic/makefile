@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -std=c99 -Wall -Werror -pedantic
+CFLAGS := -std=c99 -Wall -Werror -pedantic -g3
 OBJ := in_out.o number_division.o
 
 main.exe : $(OBJ) main.o
