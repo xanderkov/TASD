@@ -193,6 +193,8 @@ int divide(long_float a, long_float b, long_float *c)
                 shift(&a);
                 a.start_index--;
             }
+            if (current_digit > 10)
+                current_digit /= 10;
             c->significand[i] = current_digit;
             c->significand_length++;
             current_digit = 0;
