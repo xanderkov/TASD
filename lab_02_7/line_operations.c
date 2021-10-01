@@ -2,14 +2,12 @@
 #include "io.h"
 #include "defines.h"
 
-int is_birthday(int day1, int mopunt1, int year1, int day2, int mounth2, int year2)
+int is_birthday(int day1, int mopunt1, int day2, int mounth2)
 {
     int rc = NOT_OK;
-    if (year1 == year2 && mopunt1 == mounth2 && day2 - day1 < 8)
+    if (mopunt1 == mounth2 && day2 - day1 < 8)
         rc = OK;
-    if (year1 == year2 && mounth2 - mopunt1 == 1 && day2 + 30 - day1 < 8)
-        rc = OK;
-    if (year2 - year1 == 1 && mounth2 == 12 && mopunt1 == 1 && day2 + 30 - day1 < 8)
+    if (mounth2 - mopunt1 == 1 && day2 + 30 - day1 < 8)
         rc = OK;
     return rc;
 }
@@ -21,7 +19,7 @@ int find_friends_birthday(people *p, int n)
     while (true)
     {
         printf("Введите сегодняшнюю дату каждое чилсо через пробел (01 01 2000)\n");
-        if (scanf("%d%d%d", day, month, year) && day > 0 && day < 31 && month > 0 && month < 13 && year > 0)
+        if (scanf("%d%d%d", &day, &month, &year) && day > 0 && day < 31 && month > 0 && month < 13 && year > 0)
             break;
         printf("ERR_INPUT");
     }
@@ -29,11 +27,11 @@ int find_friends_birthday(people *p, int n)
     {
         if (p[i].status == 1)
         {
-            if (!is_birthday(p[i].info.bd.day, p[i].info.bd.month, p[i].info.bd.year, day, month, year))
+            if (!is_birthday(p[i].info.bd.day, p[i].info.bd.month, day, month))
                 print_string(&p[i], p[i].status);
         }
     }
-    return OK;
+    return rc;
 }
 
 int add_line(people *p, int n)
@@ -47,7 +45,7 @@ int add_line(people *p, int n)
         return ERR_READ;
     }
     int kind_phone;
-    printf("What kind of phone number? (1) - personal, (2) - service\n Input 1 or 2: ");
+    printf("Какого аббонента добавить? (1) - знакомый, (2) - коллега\n 1 or 2: ");
     if ((rc = read_int(&kind_phone, 1)) != OK)
     {
         return ERR_READ;
@@ -217,7 +215,7 @@ int delete_line(people *p, int *n)
         }
         else
         {
-            printf("запись номер %d удалена\n", *n, i);
+            printf("запись номер %d удалена\n", *n);
             for (int j = i; j < *n - 1; j++)
             {
                 p[j] = p[j + 1];

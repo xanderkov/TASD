@@ -12,6 +12,7 @@ for i in range(50):
     line = ''
     line += gen_str()
     line += gen_str()
+    line += gen_str()
     line += str(random.randint(80000000000, 89999999999)) + ' '
     if i % 2 == 0:
         line += '0 '

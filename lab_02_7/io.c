@@ -17,7 +17,7 @@ int read_file(people *p)
     while (fscanf(filename, "%s", p[i].name) != EOF)
     {
         fscanf (filename, "%s", p[i].surname);
-        fscanf (filename, "%s", p[i].adr);;
+        fscanf (filename, "%s", p[i].adr);
         fscanf (filename, "%s", p[i].phone);
         fscanf(filename, "%d", &p[i].status);
         if (p[i].status == 1)
@@ -66,9 +66,9 @@ void print_string(people *p, int status)
 
 void print_table(people *p, int n)
 {
-    printf("---------------------------------------------------------------------------------------------------------\n");
-    printf("|Номер   Имя     Фамилия      Адрес              Номер          день  месяц  год   должность организация|\n");
-    printf("|-------------------------------------------------------------------------------------------------------|\n");
+    printf("---------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("|Номер   Имя            Фамилия               Адрес                 Номер            день  месяц  год     должность         организация|\n");
+    printf("|--------------------------------------------------------------------------------------------------------------------------------------|\n");
 
     for (int i = 0; i < n; i++)
     {
@@ -133,8 +133,7 @@ int read_int(int *a, int n)
         return ERR_READ;
     }
     char *end_ptr;
-    *a = (int)strtol(chars, &end_ptr, 10);
-
+    *a = (int)strtol(chars, &end_ptr, 0);
     if (*end_ptr)
         return ERR_READ;
     free(chars);
@@ -148,6 +147,7 @@ int read_keys(key *keys, people *p, int n)
         keys[i].index = i + 1;
         strcpy(keys[i].name, p[i].name);
     }
+    return OK;
 }
 
 void print_keys(key *keys, int count)

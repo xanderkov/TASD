@@ -30,6 +30,7 @@ int bubble_keys(key *keys, int n)
              }
          }
     }
+    return OK;
 }
 
 int bubble_sort_table(people *p, int n)
@@ -44,6 +45,7 @@ int bubble_sort_table(people *p, int n)
              }
          }
     }
+    return OK;
 }
 
 unsigned long long tick(void)
