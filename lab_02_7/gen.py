@@ -8,7 +8,7 @@ def gen_str():
 
 f = open("test_2.txt", "w")
 # f.write('Фамилия Имя Номер адрес(ул. дом. кв) дата рождения должность организация \n')
-for i in range(50):
+for i in range(1000):
     line = ''
     line += gen_str()
     line += gen_str()
