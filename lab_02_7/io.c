@@ -48,8 +48,8 @@ void print_string(people *p, int status)
         printf("%-5d ", p->info.bd.day);
         printf("%-5d ", p->info.bd.month);
         printf("%-8d ", p->info.bd.year);
-        printf("     -  ");
-        printf("     -  ");
+        printf("     -        ");
+        printf("     -         ");
     }
     else
     {
@@ -91,6 +91,7 @@ void menu()
     printf("7 - Сравнить сортировку по ключам и сортировку базу \n");
     printf("8 - Сравнить быструю сортировку и сортировку пузырьком\n");
     printf("9 - Вывести друзей у которых день рождения на этой недели\n");
+    printf("10 - Выйти\n");
     printf("\nВведите действие: ");
 }
 
@@ -99,7 +100,7 @@ int input_key(int *key)
     menu();
     if (scanf("%d", key) == 1)
     {
-        if (*key > 0 && *key < 10)
+        if (*key > 0 && *key < 11)
             return OK;
     }
     return ERR_READ;
@@ -107,24 +108,16 @@ int input_key(int *key)
 
 int read_line(char *str, int size)
 {
-    int ch, i = 0;
-    while ((ch = getchar()) != '\n' && ch != EOF)
-        if (i < size)
-        {
-            str[i] = ch;
-            i++;
-        }
-    if (i > size)
-    {
-        return -1;
-    }
-    str[i] = '\0';
-    return i;
+    scanf("%s", str);
+    if (strlen(str) > size)
+        return ERR_READ;
+    return strlen(str);
 }
 
 int read_int(int *a, int n)
 {
-    char *chars = calloc(n, sizeof(char));
+    *a = -1;
+    char chars[STR_LEN];
     if (chars == NULL)
         return ERR_READ;
     int num = read_line(chars, n);
@@ -132,11 +125,10 @@ int read_int(int *a, int n)
     {
         return ERR_READ;
     }
-    char *end_ptr;
-    *a = (int)strtol(chars, &end_ptr, 0);
-    if (*end_ptr)
+    char *ptr;
+    *a = strtol(chars, &ptr, 0);
+    if (*a == -1)
         return ERR_READ;
-    free(chars);
     return OK;
 }
 

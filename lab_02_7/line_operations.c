@@ -2,12 +2,12 @@
 #include "io.h"
 #include "defines.h"
 
-int is_birthday(int day1, int mopunt1, int day2, int mounth2)
+int is_birthday(int day1, int month1, int day2, int month2)
 {
     int rc = NOT_OK;
-    if (mopunt1 == mounth2 && day2 - day1 < 8)
+    if (month1 == month2 && day1 - day2 < 8 && day1 - day2 > 0)
         rc = OK;
-    if (mounth2 - mopunt1 == 1 && day2 + 30 - day1 < 8)
+    else if (month1 - month2 == 1 && day1 + 30 - day2 < 8 && day1 + 30 - day2 > 0)
         rc = OK;
     return rc;
 }
@@ -18,19 +18,27 @@ int find_friends_birthday(people *p, int n)
     int day, month, year, rc = OK; 
     while (true)
     {
-        printf("Введите сегодняшнюю дату каждое чилсо через пробел (01 01 2000)\n");
+        printf("Введите сегодняшнюю дату каждое чилсо через пробел (1 1 2000)\n");
         if (scanf("%d%d%d", &day, &month, &year) && day > 0 && day < 31 && month > 0 && month < 13 && year > 0)
             break;
         printf("ERR_INPUT");
     }
+    int number = 0;
     for (int i = 0; i < n; i++)
     {
-        if (p[i].status == 1)
+        if (p[i].status == 0)
         {
             if (!is_birthday(p[i].info.bd.day, p[i].info.bd.month, day, month))
+            {
                 print_string(&p[i], p[i].status);
+                number++;
+            }
         }
     }
+    if (number == 0)
+        printf("Вам не кого поздравить в ближайшую неделю");
+    else
+        printf("Вам нужно поздрвать %i друзей", number);
     return rc;
 }
 
@@ -46,7 +54,8 @@ int add_line(people *p, int n)
     }
     int kind_phone;
     printf("Какого аббонента добавить? (1) - знакомый, (2) - коллега\n 1 or 2: ");
-    if ((rc = read_int(&kind_phone, 1)) != OK)
+    rc = read_int(&kind_phone, 1);
+    if (rc != OK)
     {
         return ERR_READ;
     }

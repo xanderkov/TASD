@@ -13,7 +13,7 @@ int main()
     setbuf(stdout, NULL); 
     n = read_file(p);
     printf("ЛР №2. Вариант 7\n");
-    printf("Список абонентов содержащие: Фамилию, имя, телефон, адрес(ул. дом, кв.),\n день рождения, должность, организация\n");
+    printf("Список абонентов содержащие: Фамилию, имя, телефон, адрес\n день рождения, должность, организация\n");
     printf("Выбирете нужный вам пункт, напишите соотвествующую цифру (от 1 до 9)\n");
     do
     {
@@ -56,6 +56,9 @@ int main()
             case 9:
                 find_friends_birthday(p, n);
                 break;
+            case 10:
+                printf("Выход");
+                break;
             default :
                 printf("incorrect input\n");
                 break;
@@ -70,6 +73,6 @@ int main()
             printf("incorrect input\n");
         }
     }
-    while (action != 9);
+    while (action != 10);
     return rc;
 }
