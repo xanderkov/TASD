@@ -12,6 +12,7 @@ int main()
     key keys[N];
     setbuf(stdout, NULL); 
     n = read_file(p);
+    time_table(p, keys, n);
     printf("ЛР №2. Вариант 7\n");
     printf("Список абонентов содержащие: Фамилию, имя, телефон, адрес\n день рождения, должность, организация\n");
     printf("Выбирете нужный вам пункт, напишите соотвествующую цифру (от 1 до 9)\n");
@@ -51,7 +52,7 @@ int main()
                 time_table(p, keys, n);
                 break;
             case 8:
-                time_keys(p, keys, n);
+                time_table_and_key(p, keys, n);
                 break;
             case 9:
                 find_friends_birthday(p, n);

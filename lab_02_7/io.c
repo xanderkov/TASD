@@ -11,53 +11,38 @@ int is_digit(char ch)
 int read_file(people *p)
 {
 
-    FILE *filename;
-    filename = fopen("test_2.txt", "r");
+    FILE *f;
+    f = fopen("test_2.txt", "r");
     int i = 0;
-    while (fscanf(filename, "%s", p[i].name) != EOF)
+    while (fscanf(f, "%s", p[i].name) != EOF)
     {
-        fscanf (filename, "%s", p[i].surname);
-        fscanf (filename, "%s", p[i].adr);
-        fscanf (filename, "%s", p[i].phone);
-        fscanf(filename, "%d", &p[i].status);
+        fscanf (f, "%s%s%s%d", p[i].surname, p[i].adr, p[i].phone, &p[i].status);
         if (p[i].status == 1)
-        {
-            fscanf (filename, "%s", p[i].info.serv.post);
-            fscanf (filename, "%s", p[i].info.serv.organ);
-        }
+            fscanf (f, "%s%s", p[i].info.serv.post, p[i].info.serv.organ);
         else
-        {
-            fscanf (filename, "%d", &p[i].info.bd.day);
-            fscanf (filename, "%d", &p[i].info.bd.month);
-            fscanf (filename, "%d", &p[i].info.bd.year);
-        }
+            fscanf (f, "%d%d%d", &p[i].info.bd.day, &p[i].info.bd.month, &p[i].info.bd.year);
         i++;
     }
-    fclose(filename);
+    fclose(f);
     return i;
 }
 
 void print_string(people *p, int status)
 {
-    printf("%-15s ", p->name);
-    printf("%-20s ", p->surname);
-    printf("%-20s ", p->adr);
-    printf("%-18s ", p->phone);
+    printf("%-16s %-16s %-16s %-16s ", p->name, p->surname, p->adr, p->phone);
     if (status == 0)
     {
-        printf("%-5d ", p->info.bd.day);
-        printf("%-5d ", p->info.bd.month);
-        printf("%-8d ", p->info.bd.year);
-        printf("     -        ");
+        printf("%-5d %-5d %-8d ", p->info.bd.day, p->info.bd.month, p->info.bd.year);
+        printf("     -         ");
         printf("     -         ");
     }
     else
     {
         printf("   - ");
         printf("   - ");
-        printf("   -      ");
-        printf("%-15s", p->info.serv.post);
-        printf("%-15s", p->info.serv.organ);
+        printf("   -     ");
+        printf("%-16s", p->info.serv.post);
+        printf("%-16s", p->info.serv.organ);
     }
     printf("|");
     printf("\n");
@@ -66,9 +51,9 @@ void print_string(people *p, int status)
 
 void print_table(people *p, int n)
 {
-    printf("---------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("|Номер   Имя            Фамилия               Адрес                 Номер            день  месяц  год     должность         организация|\n");
-    printf("|--------------------------------------------------------------------------------------------------------------------------------------|\n");
+    printf("|------------------------------------------------------------------------------------------------------------------------------|\n");
+    printf("|Номер    Имя           Фамилия            Адрес             Номер        день  месяц  год         должность    организация    |\n");
+    printf("|------------------------------------------------------------------------------------------------------------------------------|\n");
 
     for (int i = 0; i < n; i++)
     {

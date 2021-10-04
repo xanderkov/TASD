@@ -30,7 +30,9 @@ int find_friends_birthday(people *p, int n)
         {
             if (!is_birthday(p[i].info.bd.day, p[i].info.bd.month, day, month))
             {
-                print_string(&p[i], p[i].status);
+                fprintf(stdout,"%s %s %s %s %d %d %d %d\n", p[i].name, p[i].surname,\
+                       p[i].adr, p[i].phone, p[i].status, p[i].info.bd.day,\
+                       p[i].info.bd.month, p[i].info.bd.year);
                 number++;
             }
         }
@@ -65,38 +67,29 @@ int add_line(people *p, int n)
     }
     printf("Структура таблицы имеет следующий формат:\n");
 
-    while (true)
+    printf("Введите имя аббонента (до %i символов):\n ", STR_LEN - 1);
+    while (read_line(p[n].name, STR_LEN - 1) <= 0)
     {
-        printf("Введите имя пользователя (до %i символов):\n ", STR_LEN - 1);
-        buff = read_line(p[n].name, STR_LEN - 1);
-        if (buff > 0)
-            break;
-        printf("ERR_INPUT");
+        printf("ERR_INPUT\n");
+        printf("Введите имя аббонента (до %i символов):\n ", STR_LEN - 1);
     }
-
-    while (true)
+    printf("Введите фамилию аббонента (до %i символов):\n ", STR_LEN - 1);
+    while (read_line(p[n].surname, STR_LEN - 1) <= 0)
     {
-        printf("Введите фамилию пользователя (до %i символов):\n ", STR_LEN - 1);
-        buff = read_line(p[n].surname, STR_LEN - 1);
-        if (buff > 0)
-            break;
-        printf("ERR_INPUT");
+        printf("ERR_INPUT\n");
+        printf("Введите фамилию аббонента (до %i символов):\n ", STR_LEN - 1);
     }
-    while (true)
+    printf("Введите адресс аббонента (до %i символов):\n ", STR_LEN - 1);
+    while (read_line(p[n].adr, STR_LEN - 1) <= 0)
     {
-        printf("Введите адресс проживания пользователя (до %i символов):\n ", STR_LEN - 1);
-        buff = read_line(p[n].adr, STR_LEN - 1);
-        if (buff > 0)
-            break;
-        printf("ERR_INPUT");
+        printf("ERR_INPUT\n");
+        printf("Введите адресс аббонента (до %i символов):\n ", STR_LEN - 1);
     }
-    while (true)
+    printf("Введите номер аббонента (до %i символов):\n ", STR_LEN - 1);
+    while (read_line(p[n].phone, STR_LEN - 1) <= 0)
     {
-        printf("Введите номер пользователя (до %i символов):\n ", STR_LEN - 1);
-        buff = read_line(p[n].phone, STR_LEN - 1);
-        if (buff > 0)
-            break;
-        printf("ERR_INPUT");
+        printf("ERR_INPUT\n");
+        printf("Введите номер аббонента (до %i символов):\n ", STR_LEN - 1);
     }
     if (kind_phone == 1)
     {
@@ -167,22 +160,17 @@ int add_line(people *p, int n)
     else
     {
         p[n].status = 1;
-        while (true)
+        printf("Введите должность пользователя (до %i символов):\n ", STR_LEN - 1);
+        while (read_line(p[n].info.serv.post, STR_LEN - 1) <= 0)
         {
-            printf("Введите должность (до %i символов):\n ", STR_LEN - 1);
-            buff = read_line(p[n].info.serv.post, STR_LEN - 1);
-            if (buff > 0)
-                break;
-            printf("ERR_INPUT");
+            printf("ERR_INPUT\n");
+            printf("Введите должность пользователя (до %i символов):\n ", STR_LEN - 1);
         }
-
-        while (true)
+        printf("Введите организацию пользователя (до %i символов):\n ", STR_LEN - 1);
+        while (read_line(p[n].info.serv.organ, STR_LEN - 1) <= 0)
         {
-            printf("Введите название организации (до %i символов):\n ", STR_LEN - 1);
-            buff = read_line(p[n].info.serv.organ, STR_LEN - 1);
-            if (buff > 0)
-                break;
-            printf("ERR_INPUT");
+            printf("ERR_INPUT\n");
+            printf("Введите организацию пользователя (до %i символов):\n ", STR_LEN - 1);
         }
 
         fprintf(f, "%s %s %s %s %d %s %s\n", p[n].name, p[n].surname,\
