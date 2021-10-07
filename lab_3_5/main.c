@@ -1,64 +1,75 @@
 #include "defines.h"
-#include "struct.h"
+#include "matrix_operation.h"
 #include "io.h"
-#include "sort.h"
-#include "line_operations.h"
 
 
 int main()
 {
-    int rc = OK, n = 0, action = 0;
-    people p[N];
-    key keys[N];
+    int rc = OK, action, number;
+    int n = 0, m = 0, vector_len = 0;
+    int matrix[N][M] = { 0 };
+    int vector[N] = { 0 };
+    int number_of_nonezero;
     setbuf(stdout, NULL); 
-    n = read_file(p);
-    time_table(p, keys, n);
     printf("ЛР №3. Вариант номер 5\n");
     printf("Разреженная (содержащая много нулей) матрица хранится в форме 3-х объектов:\n");
     printf("- вектор A содержит значения ненулевых элементов;\n");
     printf("- вектор JA содержит номера столбцов для элементов вектора A;\n");
     printf("- связный список IA, в элементе Nk которого находится номер компонент\n");
     printf("в A и JA, с которых начинается описание строки Nk матрицы A.\n");
-    printf("Выбирете нужный вам пункт, напишите соотвествующую цифру (от 1 до 5)\n");
-    do
+    //printf("В данной программе может ");
+    rc = input_matrix_and_vector_length(&n, &m, &vector_len);
+    make_zero_matrix(n, m, matrix);
+    if (!rc)
     {
-        printf("\n\n-----------------------------------------\n");
-        if ((rc = input_key(&action)) == OK)
+        do
         {
-            switch (action)
+            printf("1) Заполнить матрицу вручную\n 2) Заполнить матрицу автоматически\n 3) Замерить время\n 4) Выйти \n");
+            printf("Выбирете нужный вам пункт, напишите соотвествующую цифру (от 1 до 4)\n");
+            printf("\n\n-------------------------------------------------------------------------------------------\n");
+            if ((rc = input_key(&action)) == OK)
             {
-            case 1:
-                rc = add_line(p, n);
-                n++;
-                break;
-            case 2:
-                delete_line(p, &n);
-                break;
-            case 3:
-                print_table(p, n);
-                break;
-            case 4:
-                read_keys(keys, p, n);
-                bubble_keys(keys, n);
-                print_keys(keys, n);
-                break;
-            case 5:
-                printf("Выход");
-                break;
-            default :
-                printf("incorrect input\n");
-                break;
+                switch (action)
+                {
+                case 1:
+                    
+                    read_vector(&vector_len, vector);
+                    read_matrix(&n, &m, matrix, &number_of_nonezero);
+                    print_matrix(n, m, matrix);
+                    print_results_of_input(n, m, matrix, vector_len, vector);
+                    break;
+                case 2:
+                    printf("Введите процент заполнения матрицы нулями:");
+                    if ((scanf("%d", &number)) == 1 && number > 0 && number < 100)
+                    {
+                        auto_input_matrix(n, m, number, matrix);
+                        auto_input_vector(n, number, vector);
+                        print_matrix(n, m, matrix);
+                        print_array(vector, n);
+                        print_results_of_input(n, m, matrix, vector_len, vector);
+                    }
+                    else
+                        printf("Неправильные проценты");
+                    break;
+                case 3:
+                    auto_input_matrix(n, m, RANDOM_NUMBER, matrix);
+                    auto_input_vector(n, RANDOM_NUMBER, vector);
+                    get_time(n, m, matrix, vector_len, vector);
+                    break;
+                case 4:
+                    printf("Выход");
+                    break;
+                default :
+                    printf("incorrect input\n");
+                    break;
+                }
             }
-            if (rc != OK)
+            else
             {
-                printf("Your input is not right. Try again\n");
+                printf("Неверный ввод\n");
             }
         }
-        else
-        {
-            printf("incorrect input\n");
-        }
+        while (action != 4 && rc == OK);
     }
-    while (action != 10);
     return rc;
 }
