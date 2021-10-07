@@ -55,6 +55,7 @@ int main()
                     auto_input_matrix(n, m, RANDOM_NUMBER, matrix);
                     auto_input_vector(n, RANDOM_NUMBER, vector);
                     get_time(n, m, matrix, vector_len, vector);
+                    printf("Обычная: %llu\n", sizeof(matrix));
                     break;
                 case 4:
                     printf("Выход");

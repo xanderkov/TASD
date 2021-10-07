@@ -231,6 +231,6 @@ void get_time(int n, int m, int (*matrix)[M], int vector_len, int *vector)
     }
     printf("Время перемножения разреженных матриц = %lf mcs\n", (float)time / N_TIME);
     printf("Занимаемая память:\n");
-    printf("Обычная: %llu\n", sizeof(matrix) * m * n);
+    
     printf("В разреженном формате: %llu\n", sizeof(A) + sizeof(JA) + sizeof(IA));
 }
