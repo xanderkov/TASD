@@ -113,7 +113,7 @@ void print_results_of_input(int n, int m, int (*matrix)[M], int vector_len, int 
     int result[N];
     create_vector_of_matrix(A, JA, IA, n, m, matrix);
     IA[none_zero_str] = number_of_nonezero;
-    for (int i = none_zero_str + 1; i < vector_len + 1; i++ )
+    for (int i = none_zero_str + 1; i < vector_len + 1; i++)
         IA[i] = 0;
     print(A, JA, IA, number_of_nonezero, none_zero_str);
     multiply_matrix_and_vector(IA, JA, A, vector_len, vector, result);
@@ -124,7 +124,7 @@ void print_results_of_input(int n, int m, int (*matrix)[M], int vector_len, int 
     create_vector_of_vector(A1, JA1, IA1, vector_len, result);
     int non_zeros_strings_res = none_zeros_string_of_vector(vector_len, result);
     IA1[none_zero_str] = non_zeros_strings_res;
-    print(A1, JA1, IA1, number_of_nonezero, non_zeros_strings_res);
+    print(A1, JA1, IA1, number_of_nonezero, non_zeros_strings_res - 1);
 }
 
 
@@ -231,6 +231,5 @@ void get_time(int n, int m, int (*matrix)[M], int vector_len, int *vector)
     }
     printf("Время перемножения разреженных матриц = %lf mcs\n", (float)time / N_TIME);
     printf("Занимаемая память:\n");
-    
     printf("В разреженном формате: %llu\n", sizeof(A) + sizeof(JA) + sizeof(IA));
 }
