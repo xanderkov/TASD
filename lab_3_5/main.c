@@ -35,11 +35,12 @@ int main()
                     read_vector(&vector_len, vector);
                     read_matrix(&n, &m, matrix, &number_of_nonezero);
                     print_matrix(n, m, matrix);
+                    print_array(vector, n);
                     print_results_of_input(n, m, matrix, vector_len, vector);
                     break;
                 case 2:
-                    printf("Введите процент заполнения матрицы нулями:");
-                    if ((scanf("%d", &number)) == 1 && number > 0 && number < 100)
+                    printf("Введите процент заполнения матрицы нулями (от 0 до 100): ");
+                    if ((scanf("%d", &number)) == 1 && number > 0 && number <= 100)
                     {
                         auto_input_matrix(n, m, number, matrix);
                         auto_input_vector(n, number, vector);
@@ -48,13 +49,13 @@ int main()
                         print_results_of_input(n, m, matrix, vector_len, vector);
                     }
                     else
-                        printf("Неправильные проценты");
+                        printf("Неправильные проценты\n");
                     break;
                 case 3:
-                    auto_input_matrix(n, m, 90, matrix);
-                    auto_input_vector(n, 90, vector);
+                    auto_input_matrix(n, m, 30, matrix);
+                    auto_input_vector(n, 30, vector);
                     get_time(n, m, matrix, vector_len, vector);
-                    printf("Обычная: %llu\n", n * m * sizeof(int));
+                    printf("Обычная: %lu\n", n * m * sizeof(int));
                     break;
                 case 4:
                     printf("Выход");

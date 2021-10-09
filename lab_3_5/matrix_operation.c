@@ -4,21 +4,15 @@
 void multiply_matrix_and_vector(int *JA, int *IA, int *A, int n, int *arr, int result[])
 {
     for (int i = 0; i < n; i++)
-    {
-        result[i] = 0;
         for (int j = JA[i]; j < JA[i + 1]; j++)
-            result[i] += A[j] * arr[IA[j]];
-    }
+            result[IA[j]] += A[j] * arr[IA[j]];
 }
 
 void multiply_matrix(int res[], int n, int m, int (*matrix1)[M], int *matrix2)
 {
     for (int i = 0; i < n; i++)
-    {
-        res[i] = 0;
         for (int j = 0; j < m; j++)
             res[i] += matrix1[i][j] * matrix2[j];
-    }
 }
 
 int number_of_non_zeros_elements(int n, int m, int (*matrix)[M])

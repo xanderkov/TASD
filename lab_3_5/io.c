@@ -24,13 +24,13 @@ void print_array(const int *arr, int n)
 int input_matrix_and_vector_length(int *n, int *m, int *vector_len)
 {
     int rc = OK;
-    printf("Введите количество строк и столбцов матрицы: \n");
+    printf("Введите количество строк и столбцов матрицы (до 500 элементов на строках или столбцов): \n");
     if (scanf("%d%d", n, m) != 2)
     {
         printf("Неверный ввод");
         rc = ERR_READ;
     }
-    else if (*n > 0 && *m > 0)
+    else if (*n > 0 && *m > 0 && *m < 501 && *n < 501)
     {
         printf("Введите количество элементов в векторе столбце:\n");
         if (scanf("%d", vector_len) != 1)
@@ -110,7 +110,7 @@ void print_results_of_input(int n, int m, int (*matrix)[M], int vector_len, int 
     int JA[number_of_nonezero];
     int A[number_of_nonezero];
     int IA[vector_len];
-    int result[N];
+    int result[N] = { 0 };
     create_vector_of_matrix(A, JA, IA, n, m, matrix);
     IA[none_zero_str] = number_of_nonezero;
     for (int i = none_zero_str + 1; i < vector_len + 1; i++)
@@ -122,24 +122,28 @@ void print_results_of_input(int n, int m, int (*matrix)[M], int vector_len, int 
     number_of_nonezero = number_of_none_zeros_elements_array(vector_len, result);
     int JA1[number_of_nonezero], A1[number_of_nonezero], IA1[vector_len];
     create_vector_of_vector(A1, JA1, IA1, vector_len, result);
-    int non_zeros_strings_res = none_zeros_string_of_vector(vector_len, result);
+    int non_zeros_strings_res = 0;
+    non_zeros_strings_res = none_zeros_string_of_vector(vector_len, result);
+    for (int i = 0; i < vector_len; i++)
+        IA1[i] = 0;
     IA1[none_zero_str] = non_zeros_strings_res;
-    print(A1, JA1, IA1, number_of_nonezero, non_zeros_strings_res - 1);
+    
+    print(A1, JA1, IA1, number_of_nonezero, none_zero_str - 1);
 }
 
 
 int read_matrix(int *n, int *m, int (*matrix)[M], int *number_of_nonezero)
 {
     int index_i, index_j = 0, non_zero = 0;
-    printf("Введите количество не нулевых элементов матрицы:\n");
+    printf("Введите количество не нулевых элементов матрицы меньше %i:\n", *n * *m);
     if (scanf("%d", number_of_nonezero) == 1 && *number_of_nonezero <= *n * *m)
     {
         for (int i = 0; i < *number_of_nonezero; i++)
         {
-            printf("Введите индексы строки и столбца, а затем ненулевое значение\n");
+            printf("Введите индексы строки (меньше %i) и столбца (меньше %i) , а затем ненулевое значение\n", *n, *m);
             while (scanf("%d %d", &index_i, &index_j) != 2 || index_i < 0 || index_j < 0 || index_i >= *n || index_j >= *m)
                 printf("Ошибка ввода. Введите индексры строки с столбцов еще раз\n");
-            printf("Введите ненулевой элемент!\n");
+            printf("Введите ненулевой элемент: \n");
             while (scanf("%d", &non_zero) != 1 || non_zero == 0)
             {
                 printf("Введите ненулевой элемент!:\n");
@@ -229,7 +233,7 @@ void get_time(int n, int m, int (*matrix)[M], int vector_len, int *vector)
         gettimeofday(&tv_stop, NULL);
         time += (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
     }
-    printf("Время перемножения разреженных матриц = %lf mcs\n", (float)time / N_TIME);
+    printf("Время перемножения обычных матриц = %lf mcs\n", (float)time / N_TIME);
     printf("Занимаемая память:\n");
-    printf("В разреженном формате: %llu\n", sizeof(A) + sizeof(JA) + sizeof(IA));
+    printf("В разреженном формате: %lu\n", sizeof(A) + sizeof(JA) + sizeof(IA));
 }
