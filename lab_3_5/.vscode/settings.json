@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "constants.h": "c",
+        "item_lib.h": "c"
+    }
+}
