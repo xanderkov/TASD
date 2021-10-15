@@ -35,7 +35,7 @@ int main()
                     read_vector(&vector_len, vector);
                     read_matrix(&n, &m, matrix, &number_of_nonezero);
                     print_matrix(n, m, matrix);
-                    print_array(vector, n);
+                    print_array(vector, vector_len);
                     print_results_of_input(n, m, matrix, vector_len, vector);
                     break;
                 case 2:
@@ -52,10 +52,10 @@ int main()
                         printf("Неправильные проценты\n");
                     break;
                 case 3:
-                    auto_input_matrix(n, m, 30, matrix);
-                    auto_input_vector(n, 30, vector);
+                    auto_input_matrix(n, m, 50, matrix);
+                    auto_input_vector(n, 50, vector);
                     get_time(n, m, matrix, vector_len, vector);
-                    printf("Обычная: %lu\n", n * m * sizeof(int));
+                    printf("Обычная: %llu\n", n * m * sizeof(int));
                     break;
                 case 4:
                     printf("Выход");

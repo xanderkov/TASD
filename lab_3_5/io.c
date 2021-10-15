@@ -109,14 +109,13 @@ void print_results_of_input(int n, int m, int (*matrix)[M], int vector_len, int 
     int none_zero_str = number_of_non_zeros_string(n, m, matrix);
     int JA[number_of_nonezero];
     int A[number_of_nonezero];
-    int IA[vector_len];
+    int IA[vector_len + 1];
     int result[N] = { 0 };
+    transpoit(n, m, matrix);
     create_vector_of_matrix(A, JA, IA, n, m, matrix);
-    IA[none_zero_str] = number_of_nonezero;
-    for (int i = none_zero_str + 1; i < vector_len + 1; i++)
-        IA[i] = 0;
-    print(A, JA, IA, number_of_nonezero, none_zero_str);
-    multiply_matrix_and_vector(IA, JA, A, vector_len, vector, result);
+    IA[vector_len] = number_of_nonezero;
+    print(A, JA, IA, number_of_nonezero, vector_len);
+    multiply_matrix_and_vector(JA, IA, A, vector_len, vector, result);
     printf("result is: ");
     print_array(result, vector_len);
     number_of_nonezero = number_of_none_zeros_elements_array(vector_len, result);
@@ -203,23 +202,16 @@ void get_time(int n, int m, int (*matrix)[M], int vector_len, int *vector)
     int64_t time;
     struct timeval tv_start, tv_stop;
     int number_of_nonezero = number_of_non_zeros_elements(n, m, matrix);
-    int none_zero_str = number_of_non_zeros_string(n, m, matrix);
-    int JA[number_of_nonezero], A[number_of_nonezero], IA[vector_len];
-    int result[N];
+    int JA[number_of_nonezero], A[number_of_nonezero];
+    int IA[vector_len + 1];
+    int result[N] = { 0 };
+    transpoit(n, m, matrix);
     create_vector_of_matrix(A, JA, IA, n, m, matrix);
-    IA[none_zero_str] = number_of_nonezero;
-    for (int i = none_zero_str + 1; i < vector_len + 1; i++ )
-        IA[i] = 0;
-    number_of_nonezero = number_of_none_zeros_elements_array(vector_len, result);
-    int JA1[number_of_nonezero], A1[number_of_nonezero], IA1[vector_len];
-    create_vector_of_vector(A1, JA1, IA1, vector_len, result);
-    int non_zeros_strings_res = none_zeros_string_of_vector(vector_len, result);
-    IA1[none_zero_str] = non_zeros_strings_res;
     time = 0;
     for (int i = 0; i < N_TIME; i++)
     {
         gettimeofday(&tv_start, NULL);
-        multiply_matrix_and_vector(IA, JA, A, vector_len, vector, result);
+        multiply_matrix_and_vector(JA, IA, A, vector_len, vector, result);
         gettimeofday(&tv_stop, NULL);
         time += (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
     }
@@ -235,5 +227,5 @@ void get_time(int n, int m, int (*matrix)[M], int vector_len, int *vector)
     }
     printf("Время перемножения обычных матриц = %lf mcs\n", (float)time / N_TIME);
     printf("Занимаемая память:\n");
-    printf("В разреженном формате: %lu\n", sizeof(A) + sizeof(JA) + sizeof(IA));
+    printf("В разреженном формате: %llu\n", sizeof(A) + sizeof(JA));
 }

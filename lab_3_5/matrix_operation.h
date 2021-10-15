@@ -9,3 +9,4 @@ void create_vector_of_matrix(int *A, int *JA, int *IA, int n, int m, int (*matri
 void create_vector_of_vector(int *A, int *JA, int *IA, int n, int *vector);
 int none_zeros_string_of_vector(int n, int *vector);
 void make_zero_matrix(int n, int m, int (*matrix)[M]);
+void transpoit(int n, int m, int (*a)[M]);
