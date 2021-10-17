@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <conio.h>
 #include <ctype.h>
 #include <inttypes.h>
 #include <stdlib.h>
@@ -8,11 +9,14 @@
 
 
 #define OK 0
+#define NULL_LENGTH 1
 #define ERR_LENGTH -1
 #define ERR_READ -2
-#define STR_LEN 17
-#define N 501
-#define M 501
+#define N 500
+#define MAXSIZE 100
 #define NOT_OK -4
 #define RANDOM_NUMBER 50
-#define N_TIME 10
+#define N_TIME 100
+#define STR_LEN 100
+#define SIGN 1
+#define DIGIT 0
