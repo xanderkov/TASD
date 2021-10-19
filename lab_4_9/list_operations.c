@@ -42,11 +42,12 @@ list_stack *create_list(int x)
 list_stack *push_list(list_stack *head, list_stack *s, int *n)
 {
     list_stack *p = head;
+    *n += 1;
     if (!head)
         return s;
     for (; p->next; p = p->next);
     p->next = s;
-    *n += 1;
+    
     return head;
 }
 
@@ -111,7 +112,7 @@ void infix_to_postfix_list(char infix[], char postfix[])
 {
     list_stack *s = NULL, *p;
     char x, token;
-    int i, j, n = 1;
+    int i, j, n = 0;
     j = 0;
     for (i = 0; infix[i] != '\0'; i++)
     {
@@ -140,9 +141,11 @@ void infix_to_postfix_list(char infix[], char postfix[])
                 }
     }
  
-    while (n > 1 && x > 0)
+    while (n > 0)
     {
         x = pop_list(&s, &n);
+        if (x < 0)
+            break;
         postfix[j++] = x;
     }
     postfix[j] = '\0';
@@ -173,7 +176,7 @@ void print_stack(list_stack *list)
 
 void start_list_menu()
 {
-    int rc = OK, action = 0, n = 1;
+    int rc = OK, action = 0, n = 0;
     list_stack *list = NULL, *cur;
     char infix[MAXSIZE], postfix[MAXSIZE], s[MAXSIZE];
     char c;
