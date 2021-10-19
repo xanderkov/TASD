@@ -22,7 +22,7 @@ void compare_time()
         gettimeofday(&tv_stop, NULL);
         time += (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
     }
-    printf("Время использование массивом = %lf mcs\n", (float)time / N_TIME);
+    printf("100 элементов)Время использование массивом = %lf mcs\n", (float)time / N_TIME);
     time = 0;
     for (int i = 0; i < N_TIME; i++)
     {
@@ -31,5 +31,5 @@ void compare_time()
         gettimeofday(&tv_stop, NULL);
         time += (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
     }
-    printf("Время использование спском = %lf mcs\n", (float)time / N_TIME);
+    printf("100 элементов)Время использование спском = %lf mcs\n", (float)time / N_TIME);
 }

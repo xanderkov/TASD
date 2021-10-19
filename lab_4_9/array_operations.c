@@ -64,25 +64,25 @@ void init(stack *s)
 void infix_to_postfix(char infix[], char postfix[])
 {
     stack s;
-    char x,token;
+    char x, token;
     int i,j;
     init(&s);
-    j=0;
+    j = 0;
     for(i = 0; infix[i] != '\0'; i++)
     {
         token=infix[i];
         if(isalnum(token))
-            postfix[j++]=token;
+            postfix[j++] = token;
         else
-            if(token=='(')
-               push(&s,'(');
+            if(token == '(')
+               push(&s, '(');
         else
-            if(token==')')
-                while((x=pop(&s))!='(')
+            if(token == ')')
+                while((x = pop(&s)) != '(')
                       postfix[j++]=x;
                 else
                 {
-                    while(precedence(token)<=precedence(top(&s))&&!empty(&s))
+                    while (precedence(token) <= precedence(top(&s)) && !empty(&s))
                     {
                         x=pop(&s);
                         postfix[j++]=x;
@@ -98,7 +98,6 @@ void infix_to_postfix(char infix[], char postfix[])
     }
  
     postfix[j]='\0';
-    printf("%s\n", postfix);
 }
 
 
@@ -149,6 +148,7 @@ void start_array_menu()
             case 3:
                 create_infix_form(arr, infix);
                 infix_to_postfix(infix, postfix);
+                printf("%s\n", postfix);
                 break;
             case 4:
                 printf("Выход\n");

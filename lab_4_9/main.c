@@ -2,6 +2,7 @@
 #include "array_operations.h"
 #include "io.h"
 #include "list_operations.h"
+#include "time.h"
 
 
 int main()
@@ -36,7 +37,7 @@ int main()
                     start_list_menu();
                     break;
                 case 3:
-                    //compare_time();
+                    compare_time();
                     break;
                 case 4:
                     printf("Выход");

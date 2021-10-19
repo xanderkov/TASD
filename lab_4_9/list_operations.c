@@ -74,7 +74,7 @@ int pop_list(list_stack **s, int *n)
 {   
     list_stack *p = *s, *prev = *s;
     int x;
-    if (*n != 0)
+    if (*n > 1)
     {
         for (; p->next; p = p->next)
             prev = p;
@@ -84,10 +84,11 @@ int pop_list(list_stack **s, int *n)
         p = NULL;
         *n -= 1;
     }
-    else if (n == 0)
+    else if (*n == 1)
     {
-        n--;
+        *n -= 1;
         x = p->data;
+        *s = NULL;
     }
     else 
         return ERR_READ;
@@ -139,14 +140,12 @@ void infix_to_postfix_list(char infix[], char postfix[])
                 }
     }
  
-    while (n > 0)
+    while (n > 1 && x > 0)
     {
         x = pop_list(&s, &n);
         postfix[j++] = x;
     }
- 
     postfix[j] = '\0';
-    printf("%s\n", postfix);
 }
 
 
@@ -212,16 +211,17 @@ void start_list_menu()
                     printf("Стек пуст\n");
                 break;
             case 3:
-                if (n > 0)
+                if (n > 1)
                 {
                     create_infix_form_list(list, infix);
                     infix_to_postfix_list(infix, postfix);
+                    printf("%s\n", postfix);
                 }
                 else
                     printf("Мало элементов\n");
                 break;
             case 4:
-                if (n > 1)
+                if (n >= 1)
                 {
                     print_stack(list);
                 }
