@@ -27,28 +27,18 @@ int full_list(list_stack *s)
         return ERR_LENGTH;
     return OK;
 }
- 
-list_stack *create_list(int x)
-{
-    list_stack *p = malloc(sizeof(list_stack));
-    if (p)
-    {
-        p->data = x;
-        p->next = NULL;
-    }
-    return p;   
-}
 
-list_stack *push_list(list_stack *head, list_stack *s, int *n)
+
+int push_list(list_stack **s, char x, int *n)
 {
-    list_stack *p = head;
+    list_stack *new = malloc(sizeof(list_stack));
     *n += 1;
-    if (!head)
-        return s;
-    for (; p->next; p = p->next);
-    p->next = s;
-    
-    return head;
+    if (!new)
+        return ERR_READ;
+    new->data = x;
+    new->next = *s;
+    *s = new;
+    return OK;
 }
 
 int top_list(list_stack *s)
@@ -71,28 +61,18 @@ int number_list(list_stack *s)
     return i;
 }
  
-int pop_list(list_stack **s, int *n)
+int pop_list(list_stack **s, int *n, void *(arr[N]), int *m)
 {   
-    list_stack *p = *s, *prev = *s;
     int x;
-    if (*n > 1)
-    {
-        for (; p->next; p = p->next)
-            prev = p;
-        x = p->data;
-        prev->next = NULL;
-        free(p);
-        p = NULL;
-        *n -= 1;
-    }
-    else if (*n == 1)
-    {
-        *n -= 1;
-        x = p->data;
-        *s = NULL;
-    }
-    else 
-        return ERR_READ;
+    if (*n < 1 || !s)
+        return ERR_LENGTH;
+    list_stack *new = (*s)->next;
+    *n -= 1;
+    x = (*s)->data;
+    arr[*m] = *s;
+    *m += 1;
+    free(*s);
+    *s = new;
     return x;
 }
 
@@ -110,9 +90,10 @@ int precedence_list(char x)
 
 void infix_to_postfix_list(char infix[], char postfix[])
 {
-    list_stack *s = NULL, *p;
+    list_stack *s = NULL;
+    void *arr[N];
     char x, token;
-    int i, j, n = 0;
+    int i, j, n = 0, m = 0;
     j = 0;
     for (i = 0; infix[i] != '\0'; i++)
     {
@@ -122,28 +103,26 @@ void infix_to_postfix_list(char infix[], char postfix[])
         else
             if (token=='(')
             {
-                p = create_list('(');
-                s = push_list(s, p, &n);
+                push_list(&s, '(', &n);
             }
         else
             if(token==')')
-                while ((x = pop_list(&s, &n)) != '(' )
+                while ((x = pop_list(&s, &n, arr, &m)) != '(' )
                       postfix[j++] = x;
                 else
                 {
                     while(precedence_list(token) <= precedence_list(top_list(s)) && !empty_list(s))
                     {
-                        x = pop_list(&s, &n);
+                        x = pop_list(&s, &n, arr, &m);
                         postfix[j++]=x;
                     }
-                    p = create_list(token);
-                    s = push_list(s, p, &n);
+                    push_list(&s, token, &n);
                 }
     }
  
     while (n > 0)
     {
-        x = pop_list(&s, &n);
+        x = pop_list(&s, &n, arr, &m);
         if (x < 0)
             break;
         postfix[j++] = x;
@@ -176,8 +155,9 @@ void print_stack(list_stack *list)
 
 void start_list_menu()
 {
-    int rc = OK, action = 0, n = 0;
-    list_stack *list = NULL, *cur;
+    int rc = OK, action = 0, n = 0, m = 0;
+    list_stack *list = NULL;
+    void *arr[N];
     char infix[MAXSIZE], postfix[MAXSIZE], s[MAXSIZE];
     char c;
     do
@@ -196,8 +176,7 @@ void start_list_menu()
                 if (scanf("%s", s) == 1 && strlen(s) == 1)
                 {
                     c = s[0];
-                    cur = create_list(c);
-                    list = push_list(list, cur, &n);
+                    push_list(&list, c, &n);
                 }
                 else
                     rc = ERR_READ;
@@ -207,7 +186,7 @@ void start_list_menu()
                     printf("Успшено добавлен элемент в стек!\n");
                 break;
             case 2:
-                rc = pop_list(&list, &n);
+                rc = pop_list(&list, &n, arr, &m);
                 if (rc > 0)
                     printf("Элемент успешно удален\n");
                 else
@@ -227,6 +206,9 @@ void start_list_menu()
                 if (n >= 1)
                 {
                     print_stack(list);
+                    printf("Адреса удаленых элементов\n");
+                    for (int i = 0; i < m; i++)
+                        printf("%p\n", arr[i]);
                 }
                 else
                     printf("Стек пуст\n");
