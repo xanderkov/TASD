@@ -111,7 +111,7 @@ void infix_to_postfix_list(char infix[], char postfix[])
 {
     list_stack *s = NULL, *p;
     char x, token;
-    int i, j, n = 1;
+    int i, j, n = 0;
     j = 0;
     for (i = 0; infix[i] != '\0'; i++)
     {
@@ -125,25 +125,28 @@ void infix_to_postfix_list(char infix[], char postfix[])
                 s = push_list(s, p, &n);
             }
         else
-            if(token==')')
+            if (token == ')')
                 while ((x = pop_list(&s, &n)) != '(' )
                       postfix[j++] = x;
-                else
+            else
+            {
+                while (precedence_list(token) <= precedence_list(top_list(s)) && !empty_list(s) && n > 0)
                 {
-                    while(precedence_list(token) <= precedence_list(top_list(s)) && !empty_list(s))
-                    {
-                        x = pop_list(&s, &n);
-                        postfix[j++]=x;
-                    }
-                    p = create_list(token);
-                    s = push_list(s, p, &n);
+                    x = pop_list(&s, &n);
+                    postfix[j++]=x;
                 }
+                p = create_list(token);
+                s = push_list(s, p, &n);
+            }
     }
  
-    while (n > 1 && x > 0)
+    while (n > 0)
     {
         x = pop_list(&s, &n);
-        postfix[j++] = x;
+        if (x > 0)
+            postfix[j++] = x;
+        else
+            break;
     }
     postfix[j] = '\0';
 }
@@ -211,7 +214,7 @@ void start_list_menu()
                     printf("Стек пуст\n");
                 break;
             case 3:
-                if (n > 1)
+                if (n > 0)
                 {
                     create_infix_form_list(list, infix);
                     infix_to_postfix_list(infix, postfix);

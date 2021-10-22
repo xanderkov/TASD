@@ -70,14 +70,14 @@ void infix_to_postfix(char infix[], char postfix[])
     j = 0;
     for(i = 0; infix[i] != '\0'; i++)
     {
-        token=infix[i];
-        if(isalnum(token))
+        token = infix[i];
+        if (isalnum(token))
             postfix[j++] = token;
         else
-            if(token == '(')
+            if (token == '(')
                push(&s, '(');
         else
-            if(token == ')')
+            if (token == ')')
                 while((x = pop(&s)) != '(')
                       postfix[j++]=x;
                 else
@@ -87,7 +87,7 @@ void infix_to_postfix(char infix[], char postfix[])
                         x=pop(&s);
                         postfix[j++]=x;
                     }
-                    push(&s,token);
+                    push(&s, token);
                 }
     }
  
