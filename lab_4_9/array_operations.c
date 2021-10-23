@@ -139,16 +139,22 @@ void start_array_menu()
                     printf("Успшено добавлен элемент в стек!\n");
                 break;
             case 2:
-                pop(&arr);
+                rc = pop(&arr);
                 if (rc > 0)
                     printf("Элемент успешно удален\n");
                 else
                     printf("Стек пуст\n");
+                rc = OK;    
                 break;
             case 3:
-                create_infix_form(arr, infix);
-                infix_to_postfix(infix, postfix);
-                printf("%s\n", postfix);
+                if (arr.top > 0)
+                {
+                    create_infix_form(arr, infix);
+                    infix_to_postfix(infix, postfix);
+                    printf("%s\n", postfix);
+                }
+                else
+                    printf("Cтек пуст\n");
                 break;
             case 4:
                 printf("Выход\n");
