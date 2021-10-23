@@ -80,15 +80,15 @@ void infix_to_postfix(char infix[], char postfix[])
             if (token == ')')
                 while((x = pop(&s)) != '(')
                       postfix[j++]=x;
-                else
+            else
+            {
+                while (precedence(token) <= precedence(top(&s)) && !empty(&s))
                 {
-                    while (precedence(token) <= precedence(top(&s)) && !empty(&s))
-                    {
-                        x=pop(&s);
-                        postfix[j++]=x;
-                    }
-                    push(&s, token);
+                    x=pop(&s);
+                    postfix[j++]=x;
                 }
+                push(&s, token);
+            }
     }
  
     while(!empty(&s))

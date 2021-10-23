@@ -92,6 +92,7 @@ void infix_to_postfix_list(char infix[], char postfix[])
     char x, token;
     int i, j, n = 0;
     j = 0;
+    printf("%s\n", infix);
     for (i = 0; infix[i] != '\0'; i++)
     {
         token = infix[i];
@@ -99,13 +100,11 @@ void infix_to_postfix_list(char infix[], char postfix[])
             postfix[j++] = token;
         else
             if (token=='(')
-            {
                 push_list(&s, '(', &n);
-            }
         else
 
-            if(token==')')
-                while ((x = pop_list(&s, &n)) != '(' )
+            if (token==')')
+                while ((x = pop_list(&s, &n)) != '(' && n > 0)
                       postfix[j++] = x;
             else
             {
@@ -113,13 +112,12 @@ void infix_to_postfix_list(char infix[], char postfix[])
                 {
                     x = pop_list(&s, &n);
                     postfix[j++]=x;
-
                 }
                 push_list(&s, token, &n);
             }
     }
  
-    while (n > 0)
+    while (n > 0 && !empty_list(s))
     {
         x = pop_list(&s, &n);
         if (x < 0)
@@ -129,14 +127,19 @@ void infix_to_postfix_list(char infix[], char postfix[])
     postfix[j] = '\0';
 }
 
-
 void create_infix_form_list(list_stack *arr, char *infix)
 {
     int i = 0;
     list_stack *p = arr;
+    char temp[N];
     for (; p->next; p = p->next)
-        infix[i++] = p->data;
-    infix[i++] = p->data;
+        temp[i++] = p->data;
+    temp[i++] = p->data;
+    temp[i] = '\0';
+    for (int j = 0; j < i; j++) 
+    {
+        infix[i - j - 1] = temp[j];
+    }
     infix[i] = '\0';
 }
 
