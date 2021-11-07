@@ -35,3 +35,27 @@ int input_key(int *key)
         return OK;
     return ERR_READ;
 }
+
+
+void print_fault_1(interval t1, double time, int count)
+{
+    double one_time = time / ((t1.max + t1.min) / 2);
+
+    printf("Погрешность 1: %lf\n", 100 * fabs(count - one_time) / one_time);
+}
+
+
+void print_fault_2(double time, int n_quit, int n_quit_2, double t_wait)
+{
+    double check_time = n_quit + n_quit_2 + t_wait;
+    if (check_time > time)
+        printf("Погрешность 2: %lf\n", 100 * fabs(time - check_time) / check_time);
+    else
+        printf("Погрешность 2: %lf\n", 100 * fabs(time - check_time) / time);
+}
+
+void print_fault_3(double time, interval t1, interval t2, interval t3, interval t4)
+{
+    double average = ((t1.max + t1.min + t3.max + t3.min) / 4.0 + (t2.max + t2.min + t4.max + t4.min) / 4.0) * N;
+    printf("Погрешность 3: %lf\n", 100 * fabs(time - average) / average);
+}

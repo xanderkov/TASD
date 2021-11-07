@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "io.h"
 
 list *add_end(list *head, list *language)
 {
@@ -153,7 +154,7 @@ void print_adresses(void **adresses, int count)
 
 int start_list_time(interval t1, interval t2, interval t3, interval t4)
 {
-    void *adr[N];
+    void *adr[MAXSIZE];
     int adr_num = 0;
     double t_in_1 = 0, t_out = 0, t_wait = 0, time = 0, t_in_2 = 0, t_min = 0, t_work = 0;
     list *head = NULL, *head_2 = NULL;
@@ -206,52 +207,34 @@ int start_list_time(interval t1, interval t2, interval t3, interval t4)
             printf("-----------------------------------------------------------------\n");
             printf("Время : %lf\n", time);
             len = list_size(head);
-            av_len += len / (n_quit / 100);
+            if (n_quit > 0)
+                av_len += len / ((double)n_quit / 100);
             printf("Средняя длина первой очереди: %lf\n", av_len);
             printf("Количество элементов первой очереди: %d\n", len);
             len = list_size(head_2);
-            av_len += len / (n_quit_2 / 100);
+            if (n_quit_2 > 0)
+                av_len += len / ((double)n_quit_2 / 100);
             printf("Средняя длина второй очереди: %lf\n", av_len);
             printf("Количество элементов второй очереди: %d\n", len);
             printf("Время ожидания: %lf\n", t_wait);
             printf("Количество прошедших элементов через первую очередь: %d\n", count);
             printf("Количество заявок вышедших из первой очереди: %d\n", n_quit);
-            printf("Среднее время пребывание в первой очереди: %lf\n", time / n_quit);
-            printf("Среднее время пребывание в второй очереди: %lf\n", time / n_quit_2);
+            if (n_quit > 0)
+                printf("Среднее время пребывание в первой очереди: %lf\n", time / n_quit);
+            if (n_quit_2 > 0)
+                printf("Среднее время пребывание в второй очереди: %lf\n", time / n_quit_2);
         }
     }
     gettimeofday(&tv_stop, NULL);
     printf("-----------------------------------------------------------------\n");
     t = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
     printf("Время использование стеком = %lf mcs\n", (float)t / N_TIME);
-    printf("Количество вошедших заявок во вторую очередь: %d\n", count_2);
-    printf("Количество вышедших заявок из второй очереди: %d\n", n_quit_2);
-    
-    double average = ((t1.max + t1.min + t3.max + t3.min) / 4.0 + (t2.max + t2.min + t4.max + t4.min) / 4.0) * N;
-    /*
-    printf("Ожидаемое время: %lf\n", average);
-    if (time <= average)
-    {
-        double deviation = (average - time) / average * 100;
-        printf("Разница первой очереди: %f%%\n", deviation);
-    }
-    else
-    {
-        double deviation = (time - average) / time * 100;
-        printf("Разница первой очереди: %f%%\n", deviation);
-    }
-    */
-    average =  n_quit + n_quit_2 + t_wait;
-    if (time <= average)
-    {
-        double deviation = (average - time) / average * 100;
-        printf("Погрешность: %f%%\n", deviation);
-    }
-    else
-    {
-        double deviation = (time - average) / time * 100;
-        printf("Погрешность: %f%%\n", deviation);
-    }
+    //printf("Количество вошедших заявок во вторую очередь: %d\n", count_2);
+    //printf("Количество вышедших заявок из второй очереди: %d\n", n_quit_2);
+    print_fault_1(t1, time, count);
+    print_fault_2(time, n_quit, n_quit_2, t_wait);
+    print_fault_3(time, t1, t2, t3, t4);
+
     if (flag == 1)
         print_adresses(adr, adr_num);
     free_all(head);

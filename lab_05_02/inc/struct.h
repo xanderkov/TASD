@@ -19,8 +19,8 @@ typedef struct
 
 typedef struct
 {
-    int entry;
-    double time;
+    void *pin;
+    void *pout;
 }queue;
 
 
