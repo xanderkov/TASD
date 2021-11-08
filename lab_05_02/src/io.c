@@ -45,9 +45,9 @@ void print_fault_1(interval t1, double time, int count)
 }
 
 
-void print_fault_2(double time, int n_quit, int n_quit_2, double t_wait)
+void print_fault_2(double time, double work, double t_wait)
 {
-    double check_time = n_quit + n_quit_2 + t_wait;
+    double check_time = work + t_wait;
     if (check_time > time)
         printf("Погрешность 2: %lf\n", 100 * fabs(time - check_time) / check_time);
     else
@@ -56,6 +56,6 @@ void print_fault_2(double time, int n_quit, int n_quit_2, double t_wait)
 
 void print_fault_3(double time, interval t1, interval t2, interval t3, interval t4)
 {
-    double average = ((t1.max + t1.min + t3.max + t3.min) / 4.0 + (t2.max + t2.min + t4.max + t4.min) / 4.0) * N;
+    double average = ((t1.max - t1.min) / 2.0 + (t3.max + t3.min) / 2.0 + (t2.max + t2.min) / 2.0 + (t4.max + t4.min) / 2.0) / 2.0 * N;
     printf("Погрешность 3: %lf\n", 100 * fabs(time - average) / average);
 }
