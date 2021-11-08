@@ -67,7 +67,7 @@ void free_all(list *head)
 
 double get_random_time(const double min, const double max)
 {
-    return (max - min) * (double)(rand() / (double)RAND_MAX) + min;
+    return (max - min) * (double)(rand() / (double)RAND_MAX) + min + EPS;
 }
 
 
@@ -169,17 +169,17 @@ int start_list_time(interval t1, interval t2, interval t3, interval t4)
     while (n_quit < 1000)
     {
         gettimeofday(&tv_start, NULL);
-        if (t_in_1 <= 0)
+        if (t_in_1 <= EPS)
         {
             t_in_1 = get_random_time(t1.min, t1.max);
             add_element_to_queue(&head, &count);
         } 
-        if (t_in_2 <= 0)
+        if (t_in_2 <= EPS)
         {
             t_in_2 = get_random_time(t2.min, t2.max);
             add_element_to_queue(&head_2, &count_2);
         }
-        if (t_out <= 0)
+        if (t_out <= EPS)
         {
             if (!head)
                 if (!head_2)
@@ -216,13 +216,14 @@ int start_list_time(interval t1, interval t2, interval t3, interval t4)
                 av_len += len / ((double)n_quit_2 / 100);
             printf("Средняя длина второй очереди: %lf\n", av_len);
             printf("Количество элементов второй очереди: %d\n", len);
-            printf("Время ожидания: %lf\n", t_wait);
             printf("Количество прошедших элементов через первую очередь: %d\n", count);
             printf("Количество заявок вышедших из первой очереди: %d\n", n_quit);
             if (n_quit > 0)
                 printf("Среднее время пребывание в первой очереди: %lf\n", time / n_quit);
             if (n_quit_2 > 0)
                 printf("Среднее время пребывание в второй очереди: %lf\n", time / n_quit_2);
+            printf("Время ожидания: %lf\n", t_wait);
+            printf("Время работы аппарата: %lf\n", t_work);
         }
     }
     gettimeofday(&tv_stop, NULL);
@@ -231,10 +232,9 @@ int start_list_time(interval t1, interval t2, interval t3, interval t4)
     printf("Время использование стеком = %lf mcs\n", (float)t / N_TIME);
     printf("Количество вошедших заявок во вторую очередь: %d\n", count_2);
     printf("Количество вышедших заявок из второй очереди: %d\n", n_quit_2);
-    printf("Время работы аппарата: %lf\n", t_work);
     print_fault_1(t1, time, count);
-    print_fault_2(time, t_work, t_wait);
-    print_fault_3(time, t1, t2, t3, t4);
+    //print_fault_2(time, t_work, t_wait);
+    //print_fault_3(time, t1, t2, t3, t4);
 
     if (flag == 1)
         print_adresses(adr, adr_num);

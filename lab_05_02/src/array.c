@@ -117,9 +117,9 @@ int start_arr_time(interval t1, interval t2, interval t3, interval t4)
     printf("Время использование стеком = %lf mcs\n", (float)t / N_TIME);
     printf("Количество вошедших заявок во вторую очередь: %d\n", count_2);
     printf("Количество вышедших заявок из второй очереди: %d\n", n_quit_2);
-    
+
     print_fault_1(t1, time, count);
-    print_fault_2(time, t_work, t_wait);
-    print_fault_3(time, t1, t2, t3, t4);
+    //print_fault_2(time, t_work, t_wait);
+    //print_fault_3(time, t1, t2, t3, t4);
     return OK;
 }
