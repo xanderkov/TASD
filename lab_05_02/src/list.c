@@ -165,10 +165,9 @@ int start_list_time(interval t1, interval t2, interval t3, interval t4)
     int i = 0;
     int64_t t = 0;
     struct timeval tv_start, tv_stop;
-    
+    gettimeofday(&tv_start, NULL);
     while (n_quit < 1000)
     {
-        gettimeofday(&tv_start, NULL);
         if (t_in_1 <= EPS)
         {
             t_in_1 = get_random_time(t1.min, t1.max);
@@ -219,9 +218,9 @@ int start_list_time(interval t1, interval t2, interval t3, interval t4)
             printf("Количество прошедших элементов через первую очередь: %d\n", count);
             printf("Количество заявок вышедших из первой очереди: %d\n", n_quit);
             if (n_quit > 0)
-                printf("Среднее время пребывание в первой очереди: %lf\n", time / n_quit);
+                printf("Среднее время пребывание в первой очереди: %lf\n", time / (double)n_quit);
             if (n_quit_2 > 0)
-                printf("Среднее время пребывание в второй очереди: %lf\n", time / n_quit_2);
+                printf("Среднее время пребывание во второй очереди: %lf\n", time / (double)n_quit_2);
             printf("Время ожидания: %lf\n", t_wait);
             printf("Время работы аппарата: %lf\n", t_work);
         }
@@ -229,7 +228,7 @@ int start_list_time(interval t1, interval t2, interval t3, interval t4)
     gettimeofday(&tv_stop, NULL);
     printf("-----------------------------------------------------------------\n");
     t = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
-    printf("Время использование стеком = %lf mcs\n", (float)t / N_TIME);
+    printf("Время использование стеком = %lf mcs\n", (float)t);
     printf("Количество вошедших заявок во вторую очередь: %d\n", count_2);
     printf("Количество вышедших заявок из второй очереди: %d\n", n_quit_2);
     print_fault_1(t1, time, count);

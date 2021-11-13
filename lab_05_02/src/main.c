@@ -2,6 +2,7 @@
 #include "array.h"
 #include "io.h"
 #include "list.h"
+#include "time.h"
 
 
 int main()
@@ -17,6 +18,7 @@ int main()
     t4.min = 0;
     t4.max = 1;
     setbuf(stdout, NULL); 
+    //get_all_time();
     printf("ЛР №5. Вариант номер 2\n");
     printf("Система состоит из обслуживающего аппарата и двух очередей заявок двух типов\n");
     do

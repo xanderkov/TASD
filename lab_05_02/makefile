@@ -4,7 +4,7 @@ SRC_PATH := src/
 INC := inc/
 OUT := out/
 UNIT_PATH := unit_tests/
-OBJ := $(OUT)io.o $(OUT)array.o $(OUT)list.o 
+OBJ := $(OUT)io.o $(OUT)array.o $(OUT)list.o $(OUT)time.o
 
 app.exe : $(OBJ) $(OUT)main.o
 	$(CC) -o app.exe  $(OBJ) $(OUT)main.o

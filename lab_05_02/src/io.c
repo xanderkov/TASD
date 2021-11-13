@@ -5,13 +5,13 @@ void input_interval(interval *t)
     printf("Введите наименьшее время заявки (>= 0 ): ");
     while (scanf("%lf", &t->min) != 1 || t->min < 0)
     {
-        printf("Неверный ввод");
+        printf("Неверный ввод\n");
         printf("Введите наименьшее время заявки (> 0 ): ");
     }
     printf("Введите наибольшое время заявки (> %lf ): ", t->min);
-    while (scanf("%lf", &t->max) != 1 || t->max < t->min)
+    while (scanf("%lf", &t->max) != 1 || t->max < t->min || fabs(t->max - t->min) < EPS)
     {
-        printf("Неверный ввод");
+        printf("Неверный ввод\n");
         printf("Введите наибольшое время заявки (> %lf ): ", t->min);
     }
 }

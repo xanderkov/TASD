@@ -47,10 +47,9 @@ int start_arr_time(interval t1, interval t2, interval t3, interval t4)
     int i = 0;
     int64_t t = 0;
     struct timeval tv_start, tv_stop;
-    
+    gettimeofday(&tv_start, NULL);
     while (n_quit < 1000)
     {
-        gettimeofday(&tv_start, NULL);
         if (t_in_1 <= 0)
         {
             t_in_1 = get_random_time(t1.min, t1.max);
@@ -91,14 +90,14 @@ int start_arr_time(interval t1, interval t2, interval t3, interval t4)
             len = abs(pin_1 - pout_1);
             if (n_quit > 0)
             {
-                av_len += len / ((double)n_quit / 100);
+                av_len += len / (double)(n_quit / 100);
                 printf("Средняя длина первой очереди: %lf\n", av_len);
             }
             printf("Количество элементов первой очереди: %d\n", len);
             len = abs(pin_2 - pout_2);
             if (n_quit_2 > 0)
             {
-                av_len += len / ((double)n_quit_2 / 100);
+                av_len += len / (double)(n_quit_2 / 100);
                 printf("Средняя длина второй очереди: %lf\n", av_len);
             }
             printf("Количество элементов второй очереди: %d\n", len);
@@ -108,13 +107,13 @@ int start_arr_time(interval t1, interval t2, interval t3, interval t4)
             if (n_quit > 0)
                 printf("Среднее время пребывание в первой очереди: %lf\n", time / n_quit);
             if (n_quit_2 > 0)
-                printf("Среднее время пребывание в второй очереди: %lf\n", time / n_quit_2);
+                printf("Среднее время пребывание во второй очереди: %lf\n", time / n_quit_2);
         }
     }
     gettimeofday(&tv_stop, NULL);
     printf("-----------------------------------------------------------------\n");
     t = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
-    printf("Время использование стеком = %lf mcs\n", (float)t / N_TIME);
+    printf("Время использование массивом = %lf mcs\n", (float)t);
     printf("Количество вошедших заявок во вторую очередь: %d\n", count_2);
     printf("Количество вышедших заявок из второй очереди: %d\n", n_quit_2);
 
