@@ -78,12 +78,12 @@ void avl_to_dot(FILE *fout, AVL *root)
     }
 }
 
-int avl_export(char *filename, char *tree_name, AVL *tree)
+int avl_export(char *tree_name, AVL *tree)
 {
     int rc = OK;
-    if (filename && tree_name)
+    if (tree_name)
     {
-        FILE *fout = fopen(filename, "w");
+        FILE *fout = fopen(AVLFILE, "w");
         if (fout)
         {
             fprintf(fout, "digraph %s {\n", tree_name);
@@ -98,3 +98,44 @@ int avl_export(char *filename, char *tree_name, AVL *tree)
         rc = ERR;
     return rc;
 }
+
+int search_file(FILE *fsearch, int search)
+{
+    rewind(fsearch);
+    int cmp = 0;
+    int num;
+    char dummy;
+    int got = 0;
+    do
+    {
+        got = fscanf(fsearch, "%d%c", &num, &dummy);
+        cmp += 1;
+        if (got && num == search)
+            return cmp;
+    } while (got > 0 && !feof(fsearch));
+    return ERR;
+}
+
+
+void input_del(FILE *f, int *search, int *maxcmp)
+{
+    rewind(f);
+    int rc = ERR;
+    while (rc)
+    {
+        printf("Введите чилсо, которое нужно удалить: ");
+        scanf("%d", search);
+        if (search_file(f, *search) > 0)
+            rc = OK;
+    }
+    
+    while (rc)
+    {
+        printf("Введите максимальное количество сравнений: ");
+        scanf("%d", maxcmp);
+        if (*maxcmp > 0)
+            rc = OK;
+    }
+}
+
+

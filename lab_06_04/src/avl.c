@@ -131,3 +131,25 @@ void bst_to_avl(BST *tree, AVL **root)
         bst_to_avl(tree->right, root);
     }
 }
+
+int search_avl(AVL *root, int search)
+{
+    int cmp = 0;
+    while (root)
+    {
+        ++cmp;
+        if (root->value == search)
+        {
+            return cmp;
+        }
+        else
+        {
+            ++cmp;
+            if (search > root->value)
+                root = root->right;
+            else
+                root = root->left;
+        }
+    }
+    return cmp;
+}

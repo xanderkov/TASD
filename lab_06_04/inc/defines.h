@@ -23,14 +23,14 @@
 #define EPS 1e-5
 #define ERR -1
 #define ERR_IO -2
-
+#define SHIFT 4
 
 
 #define APPFOLDER "C:\\Trash"
 #define DOT "C://Programm//Graphviz//bin//dot.exe"
-#define BSTFILE "BST.gv"
+#define BSTFILE "out//BST.gv"
+#define AVLFILE "out//AVL.gv"
 #define IMG_VIEWER "mspaint.exe"
-#define AVLDOTNAME "out/AVL.gv"
-#define AVLIMGNAME "out/AVL.png"
-#define BSTDOTNAME "out/BST.gv"
+#define AVLDOTNAME "out//AVL.gv"
+#define AVLIMGNAME "AVL.png"
 #define BSTIMGNAME "BST.png"

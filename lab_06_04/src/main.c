@@ -3,14 +3,16 @@
 #include "time.h"
 #include "bst.h"
 #include "avl.h"
+#include "hash.h"
 
 int main()
 {
-    int rc = OK;
+    int rc = OK, table_size = 0;
     setbuf(stdout, NULL); 
     BST *bstroot = NULL;
-    //AVL *avlroot = NULL;
-    //table_t *table = NULL;
+    AVL *avlroot = NULL;
+    table_t *table = NULL;
+
     printf("ЛР №6. Вариант номер 4\n");
     printf("Удаления из дерево и т.д. состоящего из чисел\n");
     FILE *f = NULL;
@@ -24,49 +26,81 @@ int main()
         system("start " IMG_VIEWER " " BSTIMGNAME);
     }
     
-    /*
+    
     if (!rc)
     {
         bst_to_avl(bstroot, &avlroot);
         if (!rc)
-            rc = avl_export(APPFOLDER "\\" AVLDOTNAME, "AVL", avlroot);
+            rc = avl_export("AVL", avlroot);
         if (!rc)
         {
-            system(DOT " -Tpng " APPFOLDER "\\" AVLDOTNAME " -o" APPFOLDER "\\" AVLIMGNAME);
-            system("start " IMG_VIEWER " " APPFOLDER "\\" AVLIMGNAME);
+            system(DOT " -Tpng " AVLFILE " -o " AVLIMGNAME);
+            system("start " IMG_VIEWER " " AVLIMGNAME);
         }
     }
-*/
-    /*
-    do
+    if (!rc)
     {
-        printf("   1) Построить всё\n   2) Удалеить введенное число\n   3) Выход\n");
-        printf("Выбирете нужный вам пункт, введите соотвествующую цифру (от 1 до 3): ");
-        
-        
-        if (!(rc = input_key(&action)))
-        {
-            switch (action)
-            {
-            case 1:
-                
-                break;
-            case 2:
-
-                break;
-            case 3:
-                printf("Выход");
-                break;
-            default :
-                printf("Неверный ввод\n");
-                break;
-            }
-        }
-        
-        else
-            printf("Неверный ввод\n");
+        rc = create_table(f, &table, &table_size);
+        print_hash_table(table, table_size);
     }
-    while (action != 3 && rc == OK);
-    */
+    if (!rc)
+    {
+        int search = 0, maxcmp = 0;
+        input_del(f, &search, &maxcmp);
+        int64_t time_bst = 0, time_avl = 0, time_table = 0, time_file = 0;
+        struct timeval tv_start, tv_stop;
+        gettimeofday(&tv_start, NULL);
+        int cmp_bst = search_bst(bstroot, search);
+        gettimeofday(&tv_stop, NULL);
+        time_bst = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
+        gettimeofday(&tv_start, NULL);
+        int cmp_avl = search_avl(avlroot, search);
+        gettimeofday(&tv_stop, NULL);
+        time_avl = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
+        gettimeofday(&tv_start, NULL);
+        int cmp_table = search_table(table, table_size, search);
+        gettimeofday(&tv_stop, NULL);
+        time_table = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
+        rewind(f);
+        gettimeofday(&tv_start, NULL);
+        int cmp_file = search_file(f, search);
+        gettimeofday(&tv_stop, NULL);
+        time_file = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
+
+        int elements_count = count_peaks(bstroot);
+        printf("Сруктуры\tПамять (байты)\tмкс\tСравнения\n");
+        printf("Дерево:% 14d% 14d% 10d\n", elements_count * (int)(sizeof(BST)),(int)(time_bst), cmp_bst);
+        printf("АВЛ:% 17d% 14d% 10d\n", elements_count * (int)(sizeof(AVL)), (int)(time_avl), cmp_avl);
+        printf("Хэш-Таблица:% 9d% 14d% 10d\n", table_size * (int)(sizeof(table_t)) + elements_count * (int)(sizeof(table)), (int)(time_table), cmp_table);
+        printf("ФАЙЛ:% 16d% 14d% 10d\n", (int)(table_size * 4), (int)(time_file), cmp_file);
+
+        if (cmp_table > maxcmp)
+        {
+            printf("\nРеструктиризируем:\n");
+            table_t *res = NULL;
+            int new_size = 0;
+            cmp_table = restruct(table, table_size, search, &res, &new_size, maxcmp);
+            if (res)
+            {
+                free(table);
+                table = res;
+                table_size = new_size;
+                delete_from_table(table, search, table_size);
+                print_hash_table(table, table_size);
+                printf("Размер ХЭШ-Таблицы:% 15d\n", table_size *(int)(sizeof(table_t)) + elements_count * (int)(sizeof(table)));
+                printf("Количество сравнений: %d\n", cmp_table);
+            }
+            else
+                rc = ERR;
+        }
+    }
+    if (bstroot)
+        bst_free(bstroot);
+    if (avlroot)
+        avl_free(avlroot);
+
+    if (table)
+        free(table);
+
     return rc;
 }

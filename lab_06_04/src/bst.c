@@ -59,6 +59,27 @@ int input_bst(FILE *f, BST **tree)
     } while (input == 1 || (input == 2 && is_permited(dummy)));
     if (!feof(f))
         rc = ERR_IO;
-    fclose(f);
     return rc;
+}
+
+int search_bst(BST *root, int search)
+{
+    int cmp = 0;
+    while (root)
+    {
+        ++cmp;
+        if (root->value == search)
+        {
+            return cmp;
+        }
+        else
+        {
+            ++cmp;
+            if (search > root->value)
+                root = root->right;
+            else
+                root = root->left;
+        }
+    }
+    return cmp;
 }
