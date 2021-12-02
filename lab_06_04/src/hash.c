@@ -100,7 +100,7 @@ int search_table(table_t *table, int size, int search)
 
 void print_hash_table(table_t *table, int max)
 {
-    printf("hash_table is:\n");
+    printf("Хэш таблица:\n");
     for (int i = 0; i < max; i++)
         printf("%4d ", i);
     printf("\n");

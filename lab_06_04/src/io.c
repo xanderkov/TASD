@@ -128,7 +128,7 @@ void input_del(FILE *f, int *search, int *maxcmp)
         if (search_file(f, *search) > 0)
             rc = OK;
     }
-    
+    rc = ERR;
     while (rc)
     {
         printf("Введите максимальное количество сравнений: ");
