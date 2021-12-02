@@ -25,8 +25,6 @@ int main()
         system(DOT " -Tpng " BSTFILE " -o " BSTIMGNAME);
         system("start " IMG_VIEWER " " BSTIMGNAME);
     }
-    
-    
     if (!rc)
     {
         bst_to_avl(bstroot, &avlroot);
@@ -69,7 +67,7 @@ int main()
 
         int elements_count = count_peaks(bstroot);
         printf("Сруктуры\tПамять (байты)\tмкс\tСравнения\n");
-        printf("Дерево:% 14d% 14d% 10d\n", elements_count * (int)(sizeof(BST)),(int)(time_bst), cmp_bst);
+        printf("ДДП:% 17d% 14d% 10d\n", elements_count * (int)(sizeof(BST)),(int)(time_bst), cmp_bst);
         printf("АВЛ:% 17d% 14d% 10d\n", elements_count * (int)(sizeof(AVL)), (int)(time_avl), cmp_avl);
         printf("Хэш-Таблица:% 9d% 14d% 10d\n", table_size * (int)(sizeof(table_t)) + elements_count * (int)(sizeof(table)), (int)(time_table), cmp_table);
         printf("ФАЙЛ:% 16d% 14d% 10d\n", (int)(table_size * 4), (int)(time_file), cmp_file);
