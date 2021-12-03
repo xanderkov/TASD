@@ -8,21 +8,21 @@ typedef struct TABLE table_t;
 
 struct TABLE
 {
-    int n;
-    int sign;
+    int n; // Ключ
+    int sign; // Значение
 };
 
 struct BST
 {
-    BST *left, *right;
-    int value;
+    BST *left, *right; // Левая и правая ветвь
+    int value; // Значение
 };
 
 struct AVL
 {
-    int value;
-    unsigned char height;
-    AVL *left, *right;
+    int value; // Значение
+    unsigned char height; // Высота 
+    AVL *left, *right; // Левая и правая ветвь
 };
 
 

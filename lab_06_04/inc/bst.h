@@ -6,3 +6,4 @@ int count_peaks(BST *tree);
 void bst_free(BST *tree);
 int search_bst(BST *root, int search);
 int count_peaks(BST *tree);
+BST* DeleteNode(BST* node, int val);
