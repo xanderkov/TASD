@@ -139,9 +139,7 @@ int search_avl(AVL *root, int search)
     {
         ++cmp;
         if (root->value == search)
-        {
             return cmp;
-        }
         else
         {
             ++cmp;

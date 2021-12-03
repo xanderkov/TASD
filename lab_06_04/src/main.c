@@ -25,8 +25,6 @@ int main()
         system(DOT " -Tpng " BSTFILE " -o " BSTIMGNAME);
         system("start " IMG_VIEWER " " BSTIMGNAME);
     }
-    
-    
     if (!rc)
     {
         bst_to_avl(bstroot, &avlroot);
@@ -48,30 +46,44 @@ int main()
         int search = 0, maxcmp = 0;
         input_del(f, &search, &maxcmp);
         int64_t time_bst = 0, time_avl = 0, time_table = 0, time_file = 0;
+        int cmp_bst = 0, cmp_avl = 0, cmp_table = 0, cmp_file = 0;
         struct timeval tv_start, tv_stop;
         gettimeofday(&tv_start, NULL);
-        int cmp_bst = search_bst(bstroot, search);
+        for (int i = 0; i < N; i++)
+        {
+            cmp_bst = search_bst(bstroot, search);
+            DeleteNode(bstroot, search);
+        }
         gettimeofday(&tv_stop, NULL);
         time_bst = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
         gettimeofday(&tv_start, NULL);
-        int cmp_avl = search_avl(avlroot, search);
+        for (int i = 0; i < N; i++)
+        {
+            cmp_avl = search_avl(avlroot, search);
+            del(avlroot, search);
+        }
         gettimeofday(&tv_stop, NULL);
         time_avl = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
         gettimeofday(&tv_start, NULL);
-        int cmp_table = search_table(table, table_size, search);
+        for (int i = 0; i < N; i++)
+            cmp_table = search_table(table, table_size, search);
         gettimeofday(&tv_stop, NULL);
         time_table = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
         rewind(f);
         gettimeofday(&tv_start, NULL);
-        int cmp_file = search_file(f, search);
+        for (int i = 0; i < N; i++)
+        {
+            rewind(f);
+            cmp_file = search_file(f, search);
+        }
         gettimeofday(&tv_stop, NULL);
         time_file = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
 
         int elements_count = count_peaks(bstroot);
-        printf("Сруктуры\tПамять (байты)\tмкс\tСравнения\n");
-        printf("Дерево:% 14d% 14d% 10d\n", elements_count * (int)(sizeof(BST)),(int)(time_bst), cmp_bst);
+        printf("Сруктуры\tПамять (байты)\tнс\tСравнения\n");
+        printf("ДДП:% 17d% 14d% 10d\n", elements_count * (int)(sizeof(BST)),(int)(time_bst), cmp_bst);
         printf("АВЛ:% 17d% 14d% 10d\n", elements_count * (int)(sizeof(AVL)), (int)(time_avl), cmp_avl);
-        printf("Хэш-Таблица:% 9d% 14d% 10d\n", table_size * (int)(sizeof(table_t)) + elements_count * (int)(sizeof(table)), (int)(time_table), cmp_table);
+        printf("Хеш-Таблица:% 9d% 14d% 10d\n", table_size * (int)(sizeof(table_t)) + elements_count * (int)(sizeof(table)), (int)(time_table), cmp_table);
         printf("ФАЙЛ:% 16d% 14d% 10d\n", (int)(table_size * 4), (int)(time_file), cmp_file);
 
         if (cmp_table > maxcmp)

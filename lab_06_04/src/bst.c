@@ -69,9 +69,7 @@ int search_bst(BST *root, int search)
     {
         ++cmp;
         if (root->value == search)
-        {
             return cmp;
-        }
         else
         {
             ++cmp;
@@ -82,4 +80,51 @@ int search_bst(BST *root, int search)
         }
     }
     return cmp;
+}
+
+
+
+BST* DeleteNode(BST* node, int val)
+{
+    if(node == NULL)
+        return node;
+ 
+    if(val == node->value)
+    {
+ 
+        BST* tmp;
+        if(node->right == NULL)
+            tmp = node->left;
+        else
+        {
+ 
+            BST* ptr = node->right;
+            if(ptr->left == NULL)
+            {
+                ptr->left = node->left;
+                tmp = ptr;
+            } 
+            else 
+            {
+                BST* pmin = ptr->left;
+                while(pmin->left != NULL)
+                {
+                    ptr  = pmin;
+                    pmin = ptr->left;
+                }
+                ptr->left   = pmin->right;
+                pmin->left  = node->left;
+                pmin->right = node->right;
+                tmp = pmin;
+            }
+        }
+ 
+        free(node);
+        return tmp;
+    } 
+    else if(val < node->value)
+        node->left  = DeleteNode(node->left, val);
+    else
+        node->right = DeleteNode(node->right, val);
+    return node;
 }
