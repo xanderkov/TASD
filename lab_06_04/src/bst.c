@@ -84,7 +84,7 @@ int search_bst(BST *root, int search)
 
 
 
-BST* DeleteNode(BST* node, int val)
+BST* delete_node(BST* node, int val)
 {
     if(node == NULL)
         return node;
@@ -120,11 +120,12 @@ BST* DeleteNode(BST* node, int val)
         }
  
         free(node);
+        node = NULL;
         return tmp;
     } 
     else if(val < node->value)
-        node->left  = DeleteNode(node->left, val);
+        node->left  = delete_node(node->left, val);
     else
-        node->right = DeleteNode(node->right, val);
+        node->right = delete_node(node->right, val);
     return node;
 }

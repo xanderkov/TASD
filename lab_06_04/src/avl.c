@@ -83,6 +83,7 @@ void avl_free(AVL *root)
         avl_free(root->right);
         avl_free(root->left);
         free(root);
+        root = NULL;
     }
 }
 

@@ -52,16 +52,19 @@ int main()
         for (int i = 0; i < N; i++)
         {
             cmp_bst = search_bst(bstroot, search);
-            DeleteNode(bstroot, search);
+            //delete_node(bstroot, search);
         }
         gettimeofday(&tv_stop, NULL);
         time_bst = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
         gettimeofday(&tv_start, NULL);
+        /*
         for (int i = 0; i < N; i++)
         {
             cmp_avl = search_avl(avlroot, search);
-            del(avlroot, search);
+            
         }
+        */
+        del(avlroot, search);
         gettimeofday(&tv_stop, NULL);
         time_avl = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
         gettimeofday(&tv_start, NULL);
