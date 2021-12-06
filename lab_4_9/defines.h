@@ -12,7 +12,7 @@
 #define ERR_LENGTH -1
 #define ERR_READ -2
 #define N 500
-#define MAXSIZE 100
+#define MAXSIZE 102
 #define NOT_OK -4
 #define RANDOM_NUMBER 50
 #define N_TIME 100

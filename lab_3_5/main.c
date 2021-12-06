@@ -52,10 +52,10 @@ int main()
                         printf("Неправильные проценты\n");
                     break;
                 case 3:
-                    auto_input_matrix(n, m, 60, matrix);
-                    auto_input_vector(n, 60, vector);
+                    auto_input_matrix(n, m, 10, matrix);
+                    auto_input_vector(n, 10, vector);
                     get_time(n, m, matrix, vector_len, vector);
-                    printf("Обычная: %llu\n", n * m * sizeof(int));
+                    printf("Обычная: %lu\n", n * m * sizeof(int));
                     break;
                 case 4:
                     printf("Выход");

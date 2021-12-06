@@ -99,20 +99,22 @@ int avl_export(char *tree_name, AVL *tree)
     return rc;
 }
 
-int search_file(FILE *fsearch, int search)
+int search_file(FILE *f, int search)
 {
-    rewind(fsearch);
+    rewind(f);
     int cmp = 0;
     int num;
     char dummy;
     int got = 0;
     do
     {
-        got = fscanf(fsearch, "%d%c", &num, &dummy);
+        got = fscanf(f, "%d%c", &num, &dummy);
         cmp += 1;
         if (got && num == search)
+        {
             return cmp;
-    } while (got > 0 && !feof(fsearch));
+        }
+    } while (got > 0 && !feof(f));
     return ERR;
 }
 

@@ -47,6 +47,7 @@ int count_peaks(BST *tree)
 
 int input_bst(FILE *f, BST **tree)
 {
+    rewind(f);
     *tree = NULL;
     int num, rc = OK;
     char dummy;

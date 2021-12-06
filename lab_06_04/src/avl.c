@@ -103,11 +103,11 @@ AVL* removemin(AVL* p)
 AVL* del(AVL* p, int key)
 {
     if (!p) 
-        return OK;
+        return NULL;
     if (key < p->value)
         p->left = del(p->left, key);
     else if (key > p->value)
-        p->right = del(p->right,key);
+        p->right = del(p->right, key);
     else
     {
         AVL* q = p->left;

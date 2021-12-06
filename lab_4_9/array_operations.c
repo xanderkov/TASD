@@ -4,7 +4,7 @@
 
 typedef struct stack
 {
-    int data[MAXSIZE];
+    int data[N];
     int top;
 }stack;
 
@@ -17,16 +17,18 @@ int empty(stack *s)
  
 int full(stack *s)
 {
-    if(s->top == MAXSIZE - 1)
+    if(s->top == MAXSIZE)
         return ERR_LENGTH;
- 
     return OK;
 }
  
-void push(stack *s, int x)
+int push(stack *s, int x)
 {
+    if (s->top >= MAXSIZE - 1)
+        return ERR_LENGTH;
     s->top = s->top + 1;
     s->data[s->top] = x;
+    return OK;
 }
  
 int pop(stack *s)
@@ -78,8 +80,8 @@ void infix_to_postfix(char infix[], char postfix[])
                push(&s, '(');
         else
             if (token == ')')
-                while((x = pop(&s)) != '(')
-                      postfix[j++]=x;
+                while((x = pop(&s)) != '(' && x > 0)
+                      postfix[j++] = x;
             else
             {
                 while (precedence(token) <= precedence(top(&s)) && !empty(&s))
@@ -93,8 +95,10 @@ void infix_to_postfix(char infix[], char postfix[])
  
     while(!empty(&s))
     {
-        x=pop(&s);
-        postfix[j++]=x;
+        x = pop(&s);
+        if (x < 0)
+            break;
+        postfix[j++] = x;
     }
  
     postfix[j]='\0';
@@ -115,7 +119,7 @@ void start_array_menu()
     int rc = OK, action = 0;
     stack arr;
     init(&arr);
-    char infix[MAXSIZE], postfix[MAXSIZE], s[MAXSIZE];
+    char infix[N], postfix[N], s[N];
     char c;
     do
     {
@@ -129,7 +133,7 @@ void start_array_menu()
                 if (scanf("%s", s) == 1 && strlen(s) == 1)
                 {
                     c = s[0];
-                    push(&arr, c);
+                    rc = push(&arr, c);
                 }
                 else
                     rc = ERR_READ;
@@ -137,6 +141,7 @@ void start_array_menu()
                     printf("В стек ничего не добавлено\n");
                 if (!rc)
                     printf("Успшено добавлен элемент в стек!\n");
+                rc = OK;
                 break;
             case 2:
                 rc = pop(&arr);
@@ -147,16 +152,21 @@ void start_array_menu()
                 rc = OK;    
                 break;
             case 3:
-                if (arr.top > 0)
+                printf("Введите выражение до 100 элементов: ");
+                scanf("%s", infix);
+                if (strlen(infix) < MAXSIZE)
                 {
-                    create_infix_form(arr, infix);
                     infix_to_postfix(infix, postfix);
                     printf("%s\n", postfix);
                 }
                 else
-                    printf("Cтек пуст\n");
+                    printf("Превышен лимит ввода");
                 break;
             case 4:
+                for (int i = 0; i <= arr.top; i++)
+                    printf("%c\n", arr.data[i]);
+                break;
+            case 5:
                 printf("Выход\n");
                 break;
             default :
@@ -168,6 +178,6 @@ void start_array_menu()
         {
             printf("Неверный ввод\n");
         }   
-    }while (action != 4 && rc == OK);
+    }while (action != 5 && rc == OK);
     
 }

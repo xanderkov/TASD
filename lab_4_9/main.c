@@ -30,7 +30,6 @@ int main()
                 switch (action)
                 {
                 case 1:
-                    
                     start_array_menu();
                     break;
                 case 2:
@@ -52,7 +51,7 @@ int main()
                 printf("Неверный ввод\n");
             }
         }
-        while (action != 4 && rc == OK);
+        while (action != 4);
     }
     return rc;
 }

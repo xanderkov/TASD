@@ -32,6 +32,8 @@ int full_list(list_stack *s)
 int push_list(list_stack **s, char x, int *n)
 {
     list_stack *new = malloc(sizeof(list_stack));
+    if (*n >= MAXSIZE)
+        return ERR_LENGTH;
     *n += 1;
     if (!new)
         return ERR_READ;
@@ -92,7 +94,6 @@ void infix_to_postfix_list(char infix[], char postfix[])
     char x, token;
     int i, j, n = 0;
     j = 0;
-    printf("%s\n", infix);
     for (i = 0; infix[i] != '\0'; i++)
     {
         token = infix[i];
@@ -203,7 +204,7 @@ void start_list_menu()
                 if (scanf("%s", s) == 1 && strlen(s) == 1)
                 {
                     c = s[0];
-                    push_list(&list, c, &n);
+                    rc = push_list(&list, c, &n);
                     delete_old_memory_from_array(list, n, arr, &m);
                 }
                 else
@@ -222,14 +223,15 @@ void start_list_menu()
                     printf("Стек пуст\n");
                 break;
             case 3:
-                if (n > 0)
+                printf("Введите выражение до 100 элементов: ");
+                scanf("%s", infix);
+                if (strlen(infix) < MAXSIZE)
                 {
-                    create_infix_form_list(list, infix);
                     infix_to_postfix_list(infix, postfix);
                     printf("%s\n", postfix);
                 }
                 else
-                    printf("Мало элементов\n");
+                    printf("Превышен лимит ввода");
                 break;
             case 4:
                 if (n >= 1)
