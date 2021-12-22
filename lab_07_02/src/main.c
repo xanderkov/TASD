@@ -11,6 +11,7 @@ int main()
     int name = -1;
     int64_t time_table = 0;
     struct timeval tv_start, tv_stop;
+    setbuf(stdout, NULL);
     do
     {
         menu();
@@ -38,8 +39,8 @@ int main()
                     rc = bfs(graph);
                 gettimeofday(&tv_stop, NULL);
                 time_table = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
-                printf("Время выполнения: %ld нс\n", time_table);
-                printf("Память: %ld байты\n", sizeof(graph));
+                printf("Время выполнения: %lld нс\n", time_table);
+                printf("Память: %lld байты\n", sizeof(graph));
                 break;
             case 4:
                 printf("Выход");

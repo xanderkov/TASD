@@ -40,9 +40,9 @@ int find(int *arr, int n, int x)
 
 bool bfs(graph_t graph) 
 {
-    bool used[100000];
-    int dst[100000];
-    int q[100000], n = 1;
+    bool used[N];
+    int dst[N];
+    int q[N], n = 1;
     q[0] = 0;
     used[0] = true;
     for (int i = 0; i < graph.size; i++)
