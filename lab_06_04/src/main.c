@@ -141,7 +141,7 @@ int main()
                 print_hash_table(table, table_size);
                 printf("Размер ХЭШ-Таблицы:% 15d\n", table_size *(int)(sizeof(table_t)) + elements_count * (int)(sizeof(table)));
                 printf("Количество сравнений: %d\n", cmp_table);
-                printf("Время выполнения: %ld\n", time_table);
+                printf("Время выполнения: %lld\n", time_table);
             }
             else
                 rc = ERR;

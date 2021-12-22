@@ -5,8 +5,9 @@ INC := inc/
 OUT := out/
 UNIT_PATH := unit_tests/
 
-app.exe : $(OUT)main.o
-	$(CC) -o app.exe $(OUT)main.o
+
+app.exe : $(OUT)main.o $(OUT)io.o $(OUT)graph_oper.o
+	$(CC) -o app.exe $(OUT)main.o $(OUT)io.o $(OUT)graph_oper.o
 
 
 $(OUT)%.o : $(SRC_PATH)%.c $(INC)*.h

@@ -1,44 +1,55 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <malloc.h>
-#include <locale.h>
-#include <time.h>
-
+#include "io.h"
+#include "defines.h"
+#include "graph_oper.h"
  
-int main() 
+int main()
 {
- 
- 
-    int n, m, x, y, a[80][80];
-    printf("Введите количество вершин: ");
-    scanf("%i", &n);
-    printf("Введите количество рёбер: ");
-    scanf("%i", &m);
-    for (int i = 1; i <= n; i++)
-        for (int j = 1; j <= n; j++)
-        {
-            a[i][j] = 0;
-        }
-    printf("\n");
-    printf("Введите рёбра: ");
-    printf("\n");
-    for (int i = 1; i <= m; i++)
+    int rc = OK, action;
+    graph_t graph;
+    FILE *f = NULL;
+    char str[STR_LEN];
+    int name = -1;
+    int64_t time_table = 0;
+    struct timeval tv_start, tv_stop;
+    do
     {
-        scanf("%i", &x);
-        scanf("%i", &y);
-        a[x][y] = 1;
-        a[y][x] = 1;
-    }
-    printf("\n");
-    printf("Матрица смежности: ");
-    printf("\n");
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= n; j++)
+        menu();
+        printf("\n\n----------------------------------------------------------------\n");
+        if (scanf("%d", &action) == 1)
         {
-            printf("%3d", a[i][j]);
+            switch (action)
+            {
+            case 1:
+                do
+                {
+                    printf("Введите название файла: ");
+                    if (scanf("%s", str) == 1 && (f = fopen(str, "r")) && f)
+                        name = OK;
+                }
+                while (name != OK);
+                rc = matrix_fill(&graph, f);
+                break;
+            case 2:
+                rc = graph_viz(graph);
+                break;
+            case 3:
+                gettimeofday(&tv_start, NULL);
+                for (int i = 0; i < N; i++)
+                    rc = bfs(graph);
+                gettimeofday(&tv_stop, NULL);
+                time_table = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
+                printf("Время выполнения: %ld нс\n", time_table);
+                printf("Память: %ld байты\n", sizeof(graph));
+                break;
+            case 4:
+                printf("Выход");
+                break;
+            default :
+                printf("Неверный ввод\n");
+                break;
+            }
         }
-        printf("\n");
     }
-    return 0;
+    while (action != 4);
+    return rc;
 }

@@ -5,9 +5,7 @@
 typedef struct
 {
     int size;
-    int edges;
-    int *peaks;
-    int 
+    int **matrix;
 } graph_t;
 
 
