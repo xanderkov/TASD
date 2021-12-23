@@ -40,7 +40,7 @@ int main()
                 gettimeofday(&tv_stop, NULL);
                 time_table = (tv_stop.tv_sec - tv_start.tv_sec) * 1000000LL + (tv_stop.tv_usec - tv_start.tv_usec);
                 printf("Время выполнения: %lld нс\n", time_table);
-                printf("Память: %lld байты\n", sizeof(graph));
+                printf("Память: %d байты\n", graph.size * graph.size * 4);
                 break;
             case 4:
                 printf("Выход");
